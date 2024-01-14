@@ -1,4 +1,4 @@
-﻿namespace team_riders;
+﻿namespace anomalydetectionapp;
 
 class Program
 {
