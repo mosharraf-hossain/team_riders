@@ -1,4 +1,4 @@
-﻿namespace NewProgram;
+﻿namespace anomalydetectionapp;
 
 class Program
 {
