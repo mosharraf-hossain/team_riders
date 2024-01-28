@@ -3,10 +3,7 @@ using NeoCortexApi.Classifiers;
 using NeoCortexApi.Encoders;
 using NeoCortexApi.Entities;
 using NeoCortexApi.Network;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 
 namespace anomalydetectionapp
