@@ -1,4 +1,6 @@
-﻿namespace anomalydetectionapp;
+﻿using System.Xml.Linq;
+
+namespace anomalydetectionapp;
 
 class Program
 {
@@ -13,20 +15,21 @@ class Program
         MultiSequenceLearning myexperiment = new MultiSequenceLearning();
         var predictor = myexperiment.Run(mysequences);*/
 
-        JsonFileReader jsonReader = new JsonFileReader();
+        // Assuming the JSON file is in a folder named "Data" within the same directory as the .sln file
+        string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+        string filePath = Path.Combine(solutionDirectory, "training_files", "file.json");
 
-        // Access the sequences data
-        var sequences = jsonReader.Sequences;
+        var jsonReader = new JsonFileReader(filePath);
 
-        // Display the sequences
+        // Access the sequences data directly
+        var sequences = jsonReader.SequencesContainer.Sequences;
+
+        // Now 'sequences' variable contains the data from the JSON file
+
+        // Example: Print the sequences
         foreach (var sequence in sequences)
         {
-            Console.WriteLine("Sequence:");
-            foreach (var number in sequence)
-            {
-                Console.Write(number + " ");
-            }
-            Console.WriteLine();
+            Console.WriteLine(string.Join(", ", sequence));
         }
 
 
