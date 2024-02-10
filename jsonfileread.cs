@@ -1,19 +1,30 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+
 public class SequencesContainer
 {
-    public List<List<int>> Sequences;
+    public List<List<int>> Sequences { get; set; }
 }
 
-public class JsonFileReader
+public class JsonFolderReader
 {
-    public SequencesContainer SequencesContainer;
+    public List<SequencesContainer> AllSequences { get; private set; }
 
-    public JsonFileReader(string filePath)
+    public JsonFolderReader(string folderPath)
     {
-        // Read the JSON file content
-        string jsonContent = File.ReadAllText(filePath);
+        AllSequences = new List<SequencesContainer>();
 
-        // Deserialize the JSON content into SequencesContainer
-        SequencesContainer = JsonConvert.DeserializeObject<SequencesContainer>(jsonContent);
+        // Get all JSON files in the folder
+        string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
+
+        foreach (var filePath in jsonFiles)
+        {
+            // Read and deserialize each JSON file
+            string jsonContent = File.ReadAllText(filePath);
+            SequencesContainer sequencesContainer = JsonConvert.DeserializeObject<SequencesContainer>(jsonContent);
+            AllSequences.Add(sequencesContainer);
+        }
     }
 }
