@@ -14,13 +14,18 @@ namespace anomalydetectionapp
 
             // Assuming the JSON file is in a folder named "Data" within the same directory as the .sln file
             string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            string folderPath = Path.Combine(solutionDirectory, "training_files");
+            string trainingfolderPath = Path.Combine(solutionDirectory, "training_files");
+            string predictingfolderPath = Path.Combine(solutionDirectory, "predicting_files");
 
             // Initialize JsonFolderReader to read JSON files
-            var jsonReader = new JsonFolderReader(folderPath);
+            var jsonReader = new JsonFolderReader(trainingfolderPath);
+
+            var jsonreader1 = new JsonFolderReader(predictingfolderPath);
 
             // Access the sequences data directly
             var sequencesContainers = jsonReader.AllSequences;
+
+            var sequencesContainers1 = jsonreader1.AllSequences;
 
             int sequenceIndex = 1;
             foreach (var sequencesContainer in sequencesContainers)
@@ -38,6 +43,11 @@ namespace anomalydetectionapp
             // Assuming MultiSequenceLearning is defined and instantiated correctly
             MultiSequenceLearning myexperiment = new MultiSequenceLearning();
             var predictor = myexperiment.Run(mysequences);
+
+            predictor.Reset();
+            //PredictNextElement(predictor, list_from_predicting_files );
+
+
         }
     }
 }
