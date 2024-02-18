@@ -45,7 +45,42 @@ namespace anomalydetectionapp
             var predictor = myexperiment.Run(mysequences);
 
             predictor.Reset();
-            //PredictNextElement(predictor, list_from_predicting_files );
+
+
+            foreach (var sequencesContainer1 in sequencesContainers1)
+            {
+                //PredictNextElement(predictor, sequencesContainer1.Sequences);
+            }
+
+            /*
+            
+            private static void PredictNextElement(Predictor predictor, double[] list)
+            {
+                Debug.WriteLine("------------------------------");
+
+                foreach (var item in list)
+                {
+                    var res = predictor.Predict(item);
+
+                    if (res.Count > 0)
+                    {
+                        foreach (var pred in res)
+                        {
+                            Debug.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
+                        }
+
+                        var tokens = res.First().PredictedInput.Split('_');
+                        var tokens2 = res.First().PredictedInput.Split('-');
+                        Debug.WriteLine($"Predicted Sequence: {tokens[0]}, predicted next element {tokens2.Last()}");
+                    }
+                    else
+                        Debug.WriteLine("Nothing predicted :(");
+                }
+
+                Debug.WriteLine("------------------------------");
+            }
+
+            */
 
 
         }
