@@ -148,7 +148,18 @@ namespace anomalydetectionapp
             var jsonReader = new JsonFolderReader(folderPath);
             var sequencesContainers = jsonReader.AllSequences;
 
-            
+            int sequenceIndex = 1;
+            foreach (var sequencesContainer in sequencesContainers)
+            {
+                var sequencesList = sequencesContainer.Sequences;
+                foreach (var sequence in sequencesList)
+                {
+                    List<double> convertedSequence = sequence.Select(x => (double)x).ToList();
+                    string sequenceKey = "S" + sequenceIndex;
+                    sequences.Add(sequenceKey, convertedSequence);
+                    sequenceIndex++;
+                }
+            }
 
             return sequences;
         }
