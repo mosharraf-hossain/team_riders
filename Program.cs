@@ -46,7 +46,42 @@ namespace anomalydetectionapp
             var predictor = myexperiment.Run(mysequences);
 
             predictor.Reset();
-            //PredictNextElement(predictor, list_from_predicting_files );
+
+
+            foreach (var sequencesContainer1 in sequencesContainers1)
+            {
+                //PredictNextElement(predictor, sequencesContainer1.Sequences);
+            }
+
+            /*
+            
+            private static void PredictNextElement(Predictor predictor, double[] list)
+            {
+                Debug.WriteLine("------------------------------");
+
+                foreach (var item in list)
+                {
+                    var res = predictor.Predict(item);
+
+                    if (res.Count > 0)
+                    {
+                        foreach (var pred in res)
+                        {
+                            Debug.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
+                        }
+
+                        var tokens = res.First().PredictedInput.Split('_');
+                        var tokens2 = res.First().PredictedInput.Split('-');
+                        Debug.WriteLine($"Predicted Sequence: {tokens[0]}, predicted next element {tokens2.Last()}");
+                    }
+                    else
+                        Debug.WriteLine("Nothing predicted :(");
+                }
+
+                Debug.WriteLine("------------------------------");
+            }
+
+            */
 
 
         }
@@ -113,7 +148,18 @@ namespace anomalydetectionapp
             var jsonReader = new JsonFolderReader(folderPath);
             var sequencesContainers = jsonReader.AllSequences;
 
-            
+            int sequenceIndex = 1;
+            foreach (var sequencesContainer in sequencesContainers)
+            {
+                var sequencesList = sequencesContainer.Sequences;
+                foreach (var sequence in sequencesList)
+                {
+                    List<double> convertedSequence = sequence.Select(x => (double)x).ToList();
+                    string sequenceKey = "S" + sequenceIndex;
+                    sequences.Add(sequenceKey, convertedSequence);
+                    sequenceIndex++;
+                }
+            }
 
             return sequences;
         }
