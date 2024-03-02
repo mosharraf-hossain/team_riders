@@ -1,15 +1,16 @@
-﻿/*
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using NeoCortexApi;
+using System.Diagnostics;
 
 namespace anomalydetectionapp
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Dictionary<string, List<double>> mysequences = new Dictionary<string, List<double>>();
 
@@ -19,19 +20,21 @@ namespace anomalydetectionapp
             string predictingfolderPath = Path.Combine(solutionDirectory, "predicting_files");
 
             // Initialize JsonFolderReader to read JSON files
-            var jsonReader = new JsonFolderReader(trainingfolderPath);
+            var trainingjsonReader = new JsonFolderReader(trainingfolderPath);
 
-            var jsonreader1 = new JsonFolderReader(predictingfolderPath);
+            var predictingjsonreader = new JsonFolderReader(predictingfolderPath);
 
             // Access the sequences data directly
-            var sequencesContainers = jsonReader.AllSequences;
+            var sequencesContainers = trainingjsonReader.AllSequences;
 
-            var sequencesContainers1 = jsonreader1.AllSequences;
+            var sequencesContainers1 = predictingjsonreader.AllSequences;
 
             int sequenceIndex = 1;
+
             foreach (var sequencesContainer in sequencesContainers)
             {
                 var sequences = sequencesContainer.Sequences;
+
                 foreach (var sequence in sequences)
                 {
                     List<double> convertedSequence = sequence.Select(x => (double)x).ToList();
@@ -44,20 +47,23 @@ namespace anomalydetectionapp
             // Assuming MultiSequenceLearning is defined and instantiated correctly
             MultiSequenceLearning myexperiment = new MultiSequenceLearning();
             var predictor = myexperiment.Run(mysequences);
-
+            
             predictor.Reset();
 
-
-            foreach (var sequencesContainer1 in sequencesContainers1)
+            foreach (var sequencesContainer in sequencesContainers1)
             {
-                //PredictNextElement(predictor, sequencesContainer1.Sequences);
+                var sequences = sequencesContainer.Sequences;
+
+                foreach (var list in sequences)
+                {
+                    double[] lst = list.Select(x => (double)x).ToArray();
+                    PredictNextElement(predictor, lst); 
+                }
             }
-
-            /*
             
-            private static void PredictNextElement(Predictor predictor, double[] list)
+            static void PredictNextElement(Predictor predictor, double[] list)
             {
-                Debug.WriteLine("------------------------------");
+                Console.WriteLine("------------------------------");
 
                 foreach (var item in list)
                 {
@@ -67,101 +73,20 @@ namespace anomalydetectionapp
                     {
                         foreach (var pred in res)
                         {
-                            Debug.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
+                            Console.WriteLine($"{pred.PredictedInput} - {pred.Similarity}");
                         }
 
                         var tokens = res.First().PredictedInput.Split('_');
                         var tokens2 = res.First().PredictedInput.Split('-');
-                        Debug.WriteLine($"Predicted Sequence: {tokens[0]}, predicted next element {tokens2.Last()}");
+                        Console.WriteLine($"Predicted Sequence: {tokens[0]}, predicted next element {tokens2.Last()}");
                     }
                     else
-                        Debug.WriteLine("Nothing predicted :(");
+                        Console.WriteLine("Nothing predicted :(");
                 }
 
-                Debug.WriteLine("------------------------------");
+                Console.WriteLine("------------------------------");
             }
 
-            */
-
-
-        }
-    }
-}
-*/
-
-
-// Path: MultiSequenceLearning.cs
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
-
-namespace anomalydetectionapp
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // Load training sequences
-            Dictionary<string, List<double>> trainingSequences = LoadSequences("training_files");
-
-            // Load predicting sequences
-            Dictionary<string, List<double>> predictingSequences = LoadSequences("predicting_files");
-
-            // Train the model
-            MultiSequenceLearning myexperiment = new MultiSequenceLearning();
-            var predictor = myexperiment.Run(trainingSequences);
-
-            // Reset the predictor before making predictions
-            predictor.Reset();
-
-            // Make predictions
-            foreach (var sequenceEntry in predictingSequences)
-            {
-                var sequenceKey = sequenceEntry.Key;
-                var sequence = sequenceEntry.Value;
-
-                // Predict next elements in the sequence
-                List<double> predictedSequence = new List<double>();
-                foreach (var element in sequence)
-                {
-                    double predictedValue = predictor.Predict(element);
-                    predictedSequence.Add(predictedValue);
-                }
-
-                // Do something with the predicted sequence
-                Console.WriteLine($"Predicted sequence for {sequenceKey}: {string.Join(", ", predictedSequence)}");
-            }
-        }
-
-        static Dictionary<string, List<double>> LoadSequences(string folderName)
-        {
-            Dictionary<string, List<double>> sequences = new Dictionary<string, List<double>>();
-
-            // Get folder path
-            string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
-            string folderPath = Path.Combine(solutionDirectory, folderName);
-
-            // Initialize JsonFolderReader to read JSON files
-            var jsonReader = new JsonFolderReader(folderPath);
-            var sequencesContainers = jsonReader.AllSequences;
-
-            int sequenceIndex = 1;
-            foreach (var sequencesContainer in sequencesContainers)
-            {
-                var sequencesList = sequencesContainer.Sequences;
-                foreach (var sequence in sequencesList)
-                {
-                    List<double> convertedSequence = sequence.Select(x => (double)x).ToList();
-                    string sequenceKey = "S" + sequenceIndex;
-                    sequences.Add(sequenceKey, convertedSequence);
-                    sequenceIndex++;
-                }
-            }
-
-            return sequences;
         }
     }
 }
