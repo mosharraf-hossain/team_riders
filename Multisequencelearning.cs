@@ -51,7 +51,7 @@ namespace anomalydetectionapp
                 PredictedSegmentDecrement = 0.1
             };
 
-            double max = 20;
+            double max = 100;
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
             {
