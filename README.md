@@ -2,13 +2,18 @@
 
 SE project repository for WS2023-24
 
+
+# Team members:
+Md Zahid Hasan(1396470)
+Md Mosharraf Hossain(1386448)
+
 # Introduction:
 
 Hierarchical Temporal Memory (HTM) technology is a machine learning framework inspired by the human neocortex's structure and function.
 It emulates the brain's ability to learn, recognize patterns, and make predictions from sensory data. HTM models the neocortex with layers
-of neurons arranged hierarchically, processing information in a sequence and learning temporal patterns dynamically.Key components include 
+of neurons arranged hierarchically, processing information in a sequence and learning temporal patterns dynamically. Key components include 
 spatial pooling, which creates sparse distributed representations of input data, and temporal memory, enabling learning sequences of patterns over time. 
-HTM systems use these learned models for real-time inference, making predictions and detecting anomalies in streaming data. 
+HTM systems use these learned models for real-time inference, making predictions, and detecting anomalies in streaming data. 
 Its applications span anomaly detection, time-series prediction, natural language processing, and sensor data analysis. 
 With continuous learning capabilities, HTM adapts to changing environments and dynamic datasets effectively. 
 As a result, it offers promising avenues for understanding intelligence and building intelligent systems. 
@@ -20,19 +25,19 @@ we train our HTM Engine by reading numerical sequences from multiple JSON files 
 
 # Required tools for the project:
 
-To run this project, we need.
+To run this project, we need:
 
 .NET 8.0 SDK
 Nuget package: NeoCortexApi Version= 1.1.4
-For code debugging, we are using IDE visual studio Community 2022.
+For code debugging, we are using IDE Visual Studio Community 2022.
 
 # Usage:
 to run this project, WE need to follow the following steps:
 
 1. Install .NET SDK. 
-2. Then using code editor/IDE of your choice Such as Visual Studio community 2022 or Visual studio Code.
+2. Then use code editor/IDE of your choice Such as Visual Studio Community 2022 or Visual Studio Code.
 3. Create a new console project and place all the C# codes inside your project folder.
-4. Add/reference nuget package NeoCortexApi v1.1.4 to this project.
+4. Add/reference Nuget package NeoCortexApi v1.1.4 to this project.
 5. Place numerical sequence JSON Files (datasets) under relevant folders respectively. All the folders should be inside the project folder.
 
 Our project is based on NeoCortex API. 
@@ -45,7 +50,7 @@ JSON files in the "predicting" and "training" folders inside the project directo
 Please take note that all files inside the folders are read with the .json extension, and exception handlers are set up in case the file format is incorrect.
 
 For this project, we are using data from NAB where the sequences of data are realTweets hourly, 
-which are stored inside the json files. Example of a json file within training and predicting folder.
+which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
 
 # data format:
 {
@@ -53,14 +58,14 @@ which are stored inside the json files. Example of a json file within training a
     [ 13,5,10,6,32,17,19,16,14,9,5,7 ],
     [ 9,9,17,12,8,15,15,1,11,5,8,13 ],
     [ 7,8,1,8,12,8,5,15,6,9,10,20 ],
-    [ 9,7,19,17,7,24,5,10,11,9,14,6 ]
-  ]
+    [ 9,7,19,17,7,24,5,10,11,9,14,6Â ]
+Â Â ]
 }
 
 
 
 # Encoding Process:
-It is crucial that our input data be encoded so that our HTM Engine can process it.
+Our input data must be encoded so that our HTM Engine can process it.
 
 We are using the following settings because we will be training and testing data that falls between the range of integer values 
 between 0-100 without any periodicity. Since we only expect values to fall within this range, the minimum and maximum values 
@@ -142,9 +147,12 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 
 We carry out our project in the manner described below:
 
-In our project, we read JSON files from the `training_files` and `predicting_folder` using `JSONFolderreader` class. We then convert the read data into sequences. 
-Sequences from the training and predicting folder will used for training our model whilethe predicting folder will only be used for predicting. After that, 
-we use Multisequenceleaning to train our model. then we use the AnomalyDetection class to detect anomalies. finally, we can detect anomalies.  
+In our project, we read all the JSON files from the `training_files` and `predicting_folder` using the `JSONFolderreader` class. 
+We then convert the read data into sequences. 
+
+Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. Model training will be done using multisequencelearning class.
+
+After that, we use the `AnomalyDetection` class to detect anomalies. We can pass the tolerance value from outside to `AnomalyDetectMethod` method.  
 
   
          
@@ -152,6 +160,3 @@ we use Multisequenceleaning to train our model. then we use the AnomalyDetection
 
 
 
-Team members:
-Md Zahid Hasan(1396470)
-Md Mosharraf Hossain(1386448)
