@@ -22,7 +22,7 @@ namespace anomalydetectionapp
             Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
 
             int inputBits = 100;
-            int numColumns = 1024;
+            int numColumns = 2048;
 
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
@@ -130,7 +130,7 @@ namespace anomalydetectionapp
 
             var lastPredictedValues = new List<string>(new string[] { "0"});
             
-            int maxCycles = 3500;
+            int maxCycles = 4500;
 
             //
             // Training SP to get stable. New-born stage.
@@ -151,6 +151,11 @@ namespace anomalydetectionapp
                         Debug.WriteLine($" -- {inputs.Key} - {input} --");
                     
                         var lyrOut = layer1.Compute(input, true);
+                        var activeColumns = layer1.GetResult("sp") as int[];
+                        int[] activecellSdrIndex = mem.ActiveCells.Select(c => c.Index).ToArray();
+                        Debug.WriteLine($"Active Coloumn for layer1 input: {input}: {Helpers.StringifyVector(activeColumns)}");
+                        Debug.WriteLine($"SDR for layer1 input: {input}: {Helpers.StringifyVector(activecellSdrIndex)}");
+                        
 
                         if (isInStableState)
                             break;
