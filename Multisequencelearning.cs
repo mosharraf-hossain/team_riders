@@ -20,10 +20,11 @@ namespace anomalydetectionapp
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
             Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
+            // Define parameters for HTM configuration
 
             int inputBits = 100;
-            int numColumns = 2048;
-
+            int numColumns = 1024;
+            // Create HTM configuration
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
                 Random = new ThreadSafeRandom(42),
@@ -52,10 +53,11 @@ namespace anomalydetectionapp
             };
 
             double max = 100;
+            // Encoder settings
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
             {
-                { "W", 15},
+                { "W", 25},
                 { "N", inputBits},
                 { "Radius", -1.0},
                 { "MinVal", 0.0},
@@ -64,20 +66,27 @@ namespace anomalydetectionapp
                 { "ClipInput", false},
                 { "MaxVal", max}
             };
+            // Create scalar encoder
 
             EncoderBase encoder = new ScalarEncoder(settings);
+
+            // Run the experiment
 
             return RunExperiment(inputBits, cfg, encoder, sequences);
         }
 
         /// <summary>
-        ///
+        /// Runs the experiment.
         /// </summary>
         private Predictor RunExperiment(int inputBits, HtmConfig cfg, EncoderBase encoder, Dictionary<string, List<double>> sequences)
         {
+            // Initialize stopwatch for measuring elapsed time
+
+
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
+            // Initialize variables
             int maxMatchCnt = 0;
 
             var mem = new Connections(cfg);
@@ -134,7 +143,7 @@ namespace anomalydetectionapp
 
             //
             // Training SP to get stable. New-born stage.
-            //
+            // Main loop for training SP to reach stability
 
             for (int i = 0; i < maxCycles && isInStableState == false; i++)
             {
