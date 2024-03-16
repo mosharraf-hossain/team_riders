@@ -5,7 +5,6 @@ using NeoCortexApi.Entities;
 using NeoCortexApi.Network;
 using System.Diagnostics;
 
-
 namespace anomalydetectionapp
 {
     /// <summary>
@@ -16,15 +15,15 @@ namespace anomalydetectionapp
         /// <summary>
         /// Runs the learning of sequences.
         /// </summary>
-        /// <param name="sequences">Dictionary of sequences. KEY is the sewuence name, the VALUE is th elist of element of the sequence.</param>
+        /// <param name="sequences">Dictionary of sequences. KEY is the sequence name, the VALUE is the list of element of the sequence.</param>
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
-            Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
-            // Define parameters for HTM configuration
 
-            int inputBits = 100;
-            int numColumns = 1024;
-            // Create HTM configuration
+            Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
+            
+            int inputBits = 121;
+            int numColumns = 1210;
+
             HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
             {
                 Random = new ThreadSafeRandom(42),
@@ -53,40 +52,32 @@ namespace anomalydetectionapp
             };
 
             double max = 100;
-            // Encoder settings
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
             {
-                { "W", 25},
+                { "W", 21},
                 { "N", inputBits},
                 { "Radius", -1.0},
                 { "MinVal", 0.0},
                 { "Periodic", false},
-                { "Name", "scalar"},
+                { "Name", "integer"},
                 { "ClipInput", false},
                 { "MaxVal", max}
             };
-            // Create scalar encoder
 
             EncoderBase encoder = new ScalarEncoder(settings);
-
-            // Run the experiment
 
             return RunExperiment(inputBits, cfg, encoder, sequences);
         }
 
         /// <summary>
-        /// Runs the experiment.
+        /// Multisequence learning experiment started
         /// </summary>
         private Predictor RunExperiment(int inputBits, HtmConfig cfg, EncoderBase encoder, Dictionary<string, List<double>> sequences)
         {
-            // Initialize stopwatch for measuring elapsed time
-
-
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            // Initialize variables
             int maxMatchCnt = 0;
 
             var mem = new Connections(cfg);
@@ -133,17 +124,17 @@ namespace anomalydetectionapp
 
             //double[] inputs = inputValues.ToArray();
             int[] prevActiveCols = new int[0];
-            
+
             int cycle = 0;
             int matches = 0;
 
-            var lastPredictedValues = new List<string>(new string[] { "0"});
-            
-            int maxCycles = 4500;
+            var lastPredictedValues = new List<string>(new string[] { "0" });
+
+            int maxCycles = 3500;
 
             //
             // Training SP to get stable. New-born stage.
-            // Main loop for training SP to reach stability
+            //
 
             for (int i = 0; i < maxCycles && isInStableState == false; i++)
             {
@@ -158,13 +149,8 @@ namespace anomalydetectionapp
                     foreach (var input in inputs.Value)
                     {
                         Debug.WriteLine($" -- {inputs.Key} - {input} --");
-                    
+
                         var lyrOut = layer1.Compute(input, true);
-                        var activeColumns = layer1.GetResult("sp") as int[];
-                        int[] activecellSdrIndex = mem.ActiveCells.Select(c => c.Index).ToArray();
-                        Debug.WriteLine($"Active Coloumn for layer1 input: {input}: {Helpers.StringifyVector(activeColumns)}");
-                        Debug.WriteLine($"SDR for layer1 input: {input}: {Helpers.StringifyVector(activecellSdrIndex)}");
-                        
 
                         if (isInStableState)
                             break;
@@ -192,9 +178,6 @@ namespace anomalydetectionapp
                 List<string> previousInputs = new List<string>();
 
                 previousInputs.Add("-1.0");
-
-                // Set on true if the system has learned the sequence with a maximum acurracy.
-                bool isLearningCompleted = false;
 
                 //
                 // Now training with SP+TM. SP is pretrained on the given input pattern set.
@@ -268,12 +251,12 @@ namespace anomalydetectionapp
                                 Debug.WriteLine($"Current Input: {input} \t| Predicted Input: {item.PredictedInput} - {item.Similarity}");
                             }
 
-                            lastPredictedValues = predictedInputValues.Select(v=>v.PredictedInput).ToList();
+                            lastPredictedValues = predictedInputValues.Select(v => v.PredictedInput).ToList();
                         }
                         else
                         {
                             Debug.WriteLine($"NO CELLS PREDICTED for next cycle.");
-                            lastPredictedValues = new List<string> ();
+                            lastPredictedValues = new List<string>();
                         }
                     }
 
@@ -283,6 +266,7 @@ namespace anomalydetectionapp
                     double accuracy = (double)matches / (double)sequenceKeyPair.Value.Count * 100.0;
 
                     Debug.WriteLine($"Cycle: {cycle}\tMatches={matches} of {sequenceKeyPair.Value.Count}\t {accuracy}%");
+
 
                     if (accuracy >= maxPossibleAccuraccy)
                     {
@@ -295,7 +279,6 @@ namespace anomalydetectionapp
                         {
                             sw.Stop();
                             Debug.WriteLine($"Sequence learned. The algorithm is in the stable state after 30 repeats with with accuracy {accuracy} of maximum possible {maxMatchCnt}. Elapsed sequence {sequenceKeyPair.Key} learning time: {sw.Elapsed}.");
-                            isLearningCompleted = true;
                             break;
                         }
                     }
@@ -308,17 +291,14 @@ namespace anomalydetectionapp
                     // This resets the learned state, so the first element starts allways from the beginning.
                     tm.Reset(mem);
                 }
-
-                if (isLearningCompleted == false)
-                    throw new Exception($"The system didn't learn with expected acurracy!");
             }
 
             Debug.WriteLine("------------ END ------------");
-           
+
             return new Predictor(layer1, mem, cls);
         }
 
-      
+
         /// <summary>
         /// Gets the number of all unique inputs.
         /// </summary>
