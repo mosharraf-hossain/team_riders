@@ -3,8 +3,17 @@ using NeoCortexApi;
 namespace anomalydetectionapp
 
 {
+    /// <summary>
+    /// Class which contains method for anomaly detection from a sequence of input values.
+    /// </summary>
     public class AnomalyDetection
     {
+        /// <summary>
+        /// Detects anomalies in a sequence of values using trained model predictor.
+        /// </summary>
+        /// <param name="predictor">The predictor model used for prediction.</param>
+        /// <param name="list">The sequence of values to test for anomalies.</param>
+        /// <param name="tolerance">The tolerance level ratio for anomaly detection (default is 0.1).</param>
         public static void AnomalyDetectMethod(Predictor predictor, double[] list, double tolerance = 0.1)
         {
             Console.WriteLine("Testing the sequence for anomaly detection: " + string.Join(", ", list) + ".");
