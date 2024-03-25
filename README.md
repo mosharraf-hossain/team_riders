@@ -53,6 +53,12 @@ For this project, we are using data from NAB where the sequences of data are rea
 which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
 
 # data format:
+
+All files inside the folders are read with the .json extension, and exception handlers are set up in case the file format is incorrect.
+
+For this project, we are using data from NAB where the sequences of data are realTweets hourly, 
+which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
+
 ```
 {
   "sequences": [
