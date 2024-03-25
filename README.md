@@ -48,16 +48,19 @@ reading and utilizing data from our training (learning) and predicting (predicti
 JSON files in the "predicting" and "training" folders inside the project directory. 
 
 # Data format:
-
-All files inside the folders are read with the .json extension, and exception handlers are set up in case the file format is incorrect.
-
-For this project, we used data from the Numenta Anomaly Benchmark (NAB), where the sequences of data are real Tweets hourly, 
+For this project, we used real-time data from Numenta Anomaly Benchmark (NAB). We have taken the tweet count of Google per hour as numerical sequences, 
 which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
 
-According to the dataset, we used a total of 32 hours data where the beginning time was 22.03.2023 at 3 pm and the end time was 24.03.2023 at 4 pm. We split the data like 14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9. It means 3-4 pm there were 14 tweets, 4-5 pm there were 14 tweets, 5-6 pm there were 9 tweets, etc.  
+According to the dataset, we used a total of 32 hours (16 hours for training and 16 hours for predicting) of data where the beginning time was 01.03.2015 at 12 am and the end time was 01.03.2015 at 4 pm for training data and also the beginning time was 02.03.2015 at 12 am and the end time was 02.03.2015 at 4 pm for predicting data. 
+
+
+
+Below we give our data sequences where the sequences are in JSON files. We keep our dataset in two individual folders which are training_files (for training data where 4 files) and predicting_files (for predicting data where also 4 files).  
+
+For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below:
 
 ```
---------------------------Dataset of Training Folder (training_files) as JSON files where the file name is (file1)------------------------------------
+
 {
   "sequences": [
     [13, 16, 9, 5,10, 7, 5, 9, 13, 14, 9, 8],
@@ -67,7 +70,9 @@ According to the dataset, we used a total of 32 hours data where the beginning t
   ]
 }
 
---------------------------Dataset of Predicting Folder (predicting_files) as JSON files where the file name is (file1)------------------------------------
+--------------------------------------------------------------
+--------------------------------------------------------------
+
 {
   "sequences": [
     [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9],
