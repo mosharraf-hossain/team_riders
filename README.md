@@ -47,26 +47,34 @@ Our HTM Engine has been trained using the MultiSequenceLearning class in the Neo
 reading and utilizing data from our training (learning) and predicting (predictive) folders, which are both present as numerical sequences in 
 JSON files in the "predicting" and "training" folders inside the project directory. 
 
-Please take note that all files inside the folders are read with the .json extension, and exception handlers are set up in case the file format is incorrect.
-
-For this project, we are using data from NAB where the sequences of data are realTweets hourly, 
-which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
-
-# data format:
+# Data format:
 
 All files inside the folders are read with the .json extension, and exception handlers are set up in case the file format is incorrect.
 
-For this project, we are using data from NAB where the sequences of data are realTweets hourly, 
+For this project, we used data from the Numenta Anomaly Benchmark (NAB), where the sequences of data are real Tweets hourly, 
 which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
 
+According to the dataset, we used a total of 32 hours data where the beginning time was 22.03.2023 at 3 pm and the end time was 24.03.2023 at 4 pm. We split the data like 14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9. It means 3-4 pm there were 14 tweets, 4-5 pm there were 14 tweets, 5-6 pm there were 9 tweets, etc.  
+
 ```
+--------------------------Dataset of Training Folder (training_files) as JSON files where the file name is (file1)------------------------------------
 {
   "sequences": [
-    [ 13,5,10,6,32,17,19,16,14,9,5,7 ],
-    [ 9,9,17,12,8,15,15,1,11,5,8,13 ],
-    [ 7,8,1,8,12,8,5,15,6,9,10,20 ],
-    [ 9,7,19,17,7,24,5,10,11,9,14,6 ]
-  ]
+    [13, 16, 9, 5,10, 7, 5, 9, 13, 14, 9, 8],
+    [12, 4, 11, 11, 11, 18, 6, 5, 8, 9, 5, 15],
+    [13, 6, 14, 7, 1, 8, 9, 5, 6, 10, 6, 6],
+    [10, 16, 8, 9, 5, 16, 6, 10, 11, 6,  16, 14]
+  ]
+}
+
+--------------------------Dataset of Predicting Folder (predicting_files) as JSON files where the file name is (file1)------------------------------------
+{
+  "sequences": [
+    [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9],
+    [15, 6, 9, 5, 12, 10, 10, 10, 15, 12, 17, 14],
+    [9, 9, 7, 11, 11, 7, 7, 12, 6, 12, 6, 12],
+    [10, 6, 12, 11, 8, 8, 10, 11, 5, 3, 8, 7]
+  ]
 }
 ```
 
