@@ -171,7 +171,21 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 
 We carry out our project in the manner described below:
 
-In our project, we read all the JSON files from the `training_files` and `predicting_folder` using the `JSONFolderreader` class. 
+In our project, we keep all the JSON files inside the folder `training_files` and `predicting_files`. We use (jsonfileread) to read the json files from the folders.
+
+````
+public JsonFolderReader(string folderPath)
+    {
+        AllSequences = new List<SequencesContainer>();
+
+        // Get all JSON files in the specified folder
+        string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
+.......
+
+```
+
+
+`predicting_folder` using the `JSONFolderreader` class. 
 We then convert the read data into sequences. 
 
 Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. Model training will be done using multisequencelearning class.
