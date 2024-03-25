@@ -171,7 +171,9 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 
 We carry out our project in the manner described below:
 
-In our project, we keep all the JSON files inside the folder `training_files` and `predicting_files`. We use (jsonfileread) to read the json files from the folders.
+In our project, we keep all the JSON files inside the folder `training_files` and `predicting_files`. We have used JSON format over other formats like CSV or XML because it can handle complex and large amounts of data.
+
+We use (jsonfileread) to read the json files from the folders.
 
 ````
 public JsonFolderReader(string folderPath)
@@ -184,13 +186,25 @@ public JsonFolderReader(string folderPath)
 
 ````
 
-We extract the numerical sequences from JSON files present inside both the training and predicting files, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection.
+We extract the numerical sequences from JSON files present inside both the training and predicting folders, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting.
 
+After extracting data from JSON files, we have to convert it into a format suitable for HTM training.
 
-`predicting_folder` using the `JSONFolderreader` class. 
-We then convert the read data into sequences. 
+````
+foreach (var sequencesContainer in sequencesContainers)
+            {
+                var sequences = sequencesContainer.Sequences;
 
-Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. Model training will be done using multisequencelearning class.
+                foreach (var sequence in sequences)
+                {
+                    List<double> convertedSequence = sequence.Select(x => (double)x).ToList();
+
+                    string sequenceKey = "S" + sequenceIndex;
+                    mysequences.Add(sequenceKey, convertedSequence);
+                    sequenceIndex++;
+                }
+
+````
 
 After that, we use the `AnomalyDetection` class to detect anomalies. We can pass the tolerance value from outside to `AnomalyDetectMethod` method.  
 
