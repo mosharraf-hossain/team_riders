@@ -53,6 +53,7 @@ For this project, we are using data from NAB where the sequences of data are rea
 which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
 
 # data format:
+```
 {
   "sequences": [
     [ 13,5,10,6,32,17,19,16,14,9,5,7 ],
@@ -61,7 +62,7 @@ which are stored inside the JSON files. Example of a JSON file within the traini
     [ 9,7,19,17,7,24,5,10,11,9,14,6 ]
   ]
 }
-
+```
 
 
 # Encoding Process:
