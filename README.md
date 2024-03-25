@@ -71,7 +71,7 @@ Our input data must be encoded so that our HTM Engine can process it.
 We are using the following settings because we will be training and testing data that falls between the range of integer values 
 between 0-100 without any periodicity. Since we only expect values to fall within this range, the minimum and maximum values 
 are set to 0 and 100, respectively. It is necessary to modify these values in other use cases.
-
+```
 
             int inputBits = 100;
             int numColumns = 1024;
@@ -88,9 +88,10 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
                 ...........
                 { "MaxVal", max}
             };
-
+```
 # Complete process for Encoding:
 
+```
  public Predictor Run(Dictionary<string, List<double>> sequences)
         {
             Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
@@ -143,7 +144,7 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 
             return RunExperiment(inputBits, cfg, encoder, sequences);
         }
-
+```
 #  Execution Process of the project
 
 We carry out our project in the manner described below:
