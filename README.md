@@ -182,7 +182,9 @@ public JsonFolderReader(string folderPath)
         string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
 .......
 
-```
+````
+
+We extract the numerical sequences from JSON files present inside both the training and predicting files, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection.
 
 
 `predicting_folder` using the `JSONFolderreader` class. 
