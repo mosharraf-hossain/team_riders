@@ -79,21 +79,24 @@ between 0-100 without any periodicity. Since we only expect values to fall withi
 are set to 0 and 100, respectively. It is necessary to modify these values in other use cases.
 ```
 
-            int inputBits = 100;
-            int numColumns = 1024;
+            int inputBits = 121;
+            int numColumns = 1210;
             ---------------------
             ---------------------
             double max = 100;
 
 
-            Dictionary<string, object> settings = new Dictionary<string, object>()
-            {
-                { "W", 15},
-                ...........
-                { "MinVal", 0.0},
-                ...........
-                { "MaxVal", max}
-            };
+             Dictionary<string, object> settings = new Dictionary<string, object>()
+               {
+                   { "W", 21},
+                   { "N", inputBits},
+                   { "Radius", -1.0},
+                   { "MinVal", 0.0},
+                   { "Periodic", false},
+                   { "Name", "integer"},
+                   { "ClipInput", false},
+                   { "MaxVal", max}
+               };
 ```
 # Complete process for Encoding:
 
