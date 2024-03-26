@@ -114,7 +114,7 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
      {
          Random = new ThreadSafeRandom(42),
 
-         CellsPerColumn = 25,
+         CellsPerColumn = 21,
          GlobalInhibition = true,
          LocalAreaDensity = -1,
          NumActiveColumnsPerInhArea = 0.02 * numColumns,
