@@ -59,7 +59,7 @@ Below we give our data sequences where the sequences are in JSON files. We keep 
 
 For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below:
 
-```
+```json
 
 {
   "sequences": [
@@ -67,18 +67,6 @@ For example, an hourly sequence has a list of 12 numerical values per hour: [14,
     [12, 4, 11, 11, 11, 18, 6, 5, 8, 9, 5, 15],
     [13, 6, 14, 7, 1, 8, 9, 5, 6, 10, 6, 6],
     [10, 16, 8, 9, 5, 16, 6, 10, 11, 6,  16, 14]
-  ]
-}
-
---------------------------------------------------------------
---------------------------------------------------------------
-
-{
-  "sequences": [
-    [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9],
-    [15, 6, 9, 5, 12, 10, 10, 10, 15, 12, 17, 14],
-    [9, 9, 7, 11, 11, 7, 7, 12, 6, 12, 6, 12],
-    [10, 6, 12, 11, 8, 8, 10, 11, 5, 3, 8, 7]
   ]
 }
 ```
@@ -90,7 +78,7 @@ Our input data must be encoded so that our HTM Engine can process it.
 We are using the following settings because we will be training and testing data that falls between the range of integer values 
 between 0-100 without any periodicity. Since we only expect values to fall within this range, the minimum and maximum values 
 are set to 0 and 100, respectively. It is necessary to modify these values in other use cases.
-```
+```csharp
 
             int inputBits = 121;
             int numColumns = 1210;
@@ -113,7 +101,7 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 ```
 # Complete process for Encoding:
 
-```
+```csharp
  public Predictor Run(Dictionary<string, List<double>> sequences)
         {
             Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
@@ -175,7 +163,7 @@ In our project, we keep all the JSON files inside the folder `training_files` an
 
 We use (jsonfileread) to read the json files from the folders.
 
-````
+````csharp
 public JsonFolderReader(string folderPath)
     {
         AllSequences = new List<SequencesContainer>();
@@ -187,7 +175,7 @@ public JsonFolderReader(string folderPath)
 ````
 
 We extract the numerical sequences from JSON files present inside both the training and predicting folders, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. The folders should be in the same project directory:
-````
+````csharp
             // Get the solution directory path
             string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
 
@@ -198,7 +186,7 @@ We extract the numerical sequences from JSON files present inside both the train
 
 After extracting data from JSON files, we have to convert it into a format suitable for HTM training.
 
-````
+````csharp
 foreach (var sequencesContainer in sequencesContainers)
             {
                 var sequences = sequencesContainer.Sequences;
@@ -214,7 +202,7 @@ foreach (var sequencesContainer in sequencesContainers)
 
 ````
 We use multisequencelearning class for training our HTM model like below:
-````
+````csharp
            // Train the model using MultiSequenceLearning
             MultiSequenceLearning myexperiment = new MultiSequenceLearning();
             var predictor = myexperiment.Run(mysequences);
@@ -225,18 +213,50 @@ We are going to use the predictor object as trained HTM model to predict anomali
 
 Using the `AnomalyDetectMethod´ method of AnomalyDetection class, we pass the numerical sequences one by one to our predictor model to detect anomalies.
 
-````
+````csharp
            foreach (var sequence in sequences)
                 {
                     List<double> inputlist = sequence.Select(x => (double)x).ToList();
                     double[] inputArray = inputlist.ToArray();
                     AnomalyDetection.AnomalyDetectMethod(predictor, inputArray, 0.2);
                 }
-````
-We can pass the tolerance value from outside to `AnomalyDetectMethod` method.  
+```` 
 
-  
-         
+We are going to iterate through each value of a numerical sequence which is passed through inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
+
+```csharp
+                    var res = predictor.Predict(item);
+```
+The prediction derived from predictor model is in a format of "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]". We use string operations to extract data from it. 
+
+```csharp
+                    var value1 = res.First().PredictedInput.ToString().Split('-');
+                    var value2 = res.First().Similarity;
+```
+
+Normally output from HTM is in the following format when we pass a numerical value 14 for example:
+```csharp
+S3_11-5-12-10-14-13 - 100
+S1_5-6-16-10-4-11-7 - 5
+.....
+```
+
+The first line has the best prediction which HTM model predicts with accuracy. We can easily derive the predicted value which will come after 14 (in this case, it is 13). The string operations are used to get these values. Later we are going to use this to determine anomalies.
+
+````csharp
+
+                ..............
+
+                        int nextIndex = i + 1;
+                        double nextItem = list[nextIndex];
+                        double predictedNextItem = double.Parse(value1.Last());
+                        var AnomalyScore = Math.Abs(predictedNextItem - nextItem);
+                        var deviation = AnomalyScore / nextItem;
+
+                ..........
+````
+
+We are using AnomalyScore, which is nothing but the absolute value of the ration of differences of HTM´s predicted number and actual number. If the ratio exceeds tolerancevalue, we mark it as anomaly, otherwise it is not. When an anomaly is detected, we are going to skip that element in the list(we are not going to pass that value to HTM in loop).
 
 
 
