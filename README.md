@@ -186,7 +186,15 @@ public JsonFolderReader(string folderPath)
 
 ````
 
-We extract the numerical sequences from JSON files present inside both the training and predicting folders, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting.
+We extract the numerical sequences from JSON files present inside both the training and predicting folders, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. The folders should be in the same project directory:
+````
+            // Get the solution directory path
+            string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+
+            // Construct paths for training and predicting folders
+            string trainingfolderPath = Path.Combine(solutionDirectory, "training_files");
+            string predictingfolderPath = Path.Combine(solutionDirectory, "predicting_files");
+````
 
 After extracting data from JSON files, we have to convert it into a format suitable for HTM training.
 
@@ -205,8 +213,27 @@ foreach (var sequencesContainer in sequencesContainers)
                 }
 
 ````
+We use multisequencelearning class for training our HTM model like below:
+````
+           // Train the model using MultiSequenceLearning
+            MultiSequenceLearning myexperiment = new MultiSequenceLearning();
+            var predictor = myexperiment.Run(mysequences);
+            predictor.Reset();
+````
 
-After that, we use the `AnomalyDetection` class to detect anomalies. We can pass the tolerance value from outside to `AnomalyDetectMethod` method.  
+We are going to use the predictor object as trained HTM model to predict anomalies from our extracted data from predicting_files.
+
+Using the `AnomalyDetectMethod´ method of AnomalyDetection class, we pass the numerical sequences one by one to our predictor model to detect anomalies.
+
+````
+           foreach (var sequence in sequences)
+                {
+                    List<double> inputlist = sequence.Select(x => (double)x).ToList();
+                    double[] inputArray = inputlist.ToArray();
+                    AnomalyDetection.AnomalyDetectMethod(predictor, inputArray, 0.2);
+                }
+````
+We can pass the tolerance value from outside to `AnomalyDetectMethod` method.  
 
   
          
