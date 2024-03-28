@@ -2,11 +2,6 @@
 
 SE project repository for WS2023-24
 
-
-# Team members:
-Md Zahid Hasan(1396470)
-Md Mosharraf Hossain(1386448)
-
 # Introduction:
 
 Hierarchical Temporal Memory (HTM) technology is a machine learning framework inspired by the human neocortex's structure and function.
@@ -75,9 +70,20 @@ For example, an hourly sequence has a list of 12 numerical values per hour: [14,
 # Encoding Process:
 Our input data must be encoded so that our HTM Engine can process it.
 
-We are using the following settings because we will be training and testing data that falls between the range of integer values 
+We are using the following settings, because we will be training and testing data that falls between the range of integer values 
 between 0-100 without any periodicity. Since we only expect values to fall within this range, the minimum and maximum values 
 are set to 0 and 100, respectively. It is necessary to modify these values in other use cases.
+
+"W": 21 - The width of the output vector. 
+"N": 1024 - The number of bits to use for encoding the input range. 
+“Radius": -1.0 - The radius of the output vector. 
+"MinVal": 0.0 - The minimum value of the input range. 
+"MaxVal ": 100.0 - The maximum value of the input range. 
+"Periodic": false - Whether the encoder should wrap values around the ends of the input range.
+"Name": integer  -  A descriptive name for the settings.
+"ClipInput": false - Whether to clip input values to the input range.
+"MaxVal": max - The maximum value of the input range.
+
 ```csharp
 
             int inputBits = 121;
@@ -100,6 +106,7 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
                };
 ```
 # HTM Configuration:
+According to the Code given below: first, we gave one greeting message, then we set up parameters where the number of bits is used for encoding the input range (121) and the number of columns in the HTM network (1210). We also created the encoder "EncoderBase encoder = new ScalarEncoder(settings);" and then Ran the experiment with the configured parameters, Where the encoding process was given previously.  
 
 ```csharp
   public Predictor Run(Dictionary<string, List<double>> sequences)
@@ -175,7 +182,7 @@ public JsonFolderReader(string folderPath)
 
 ````
 
-We extract the numerical sequences from JSON files present inside both the training and predicting folders, and use it to train HTM model using multisequencelearning class. Later, data extracted from predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. The folders should be in the same project directory:
+We extract the numerical sequences from JSON files present inside both the training and predicting folders and use them to train the HTM model using the multisequencelearning class. Later, data extracted from the predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. The folders are in the same project directory:
 ````csharp
             // Get the solution directory path
             string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
@@ -185,7 +192,7 @@ We extract the numerical sequences from JSON files present inside both the train
             string predictingfolderPath = Path.Combine(solutionDirectory, "predicting_files");
 ````
 
-After extracting data from JSON files, we have to convert it into a format suitable for HTM training.
+After extracting data from JSON files, we converted it into a format suitable for HTM training.
 
 ````csharp
 foreach (var sequencesContainer in sequencesContainers)
@@ -202,7 +209,7 @@ foreach (var sequencesContainer in sequencesContainers)
                 }
 
 ````
-We use multisequencelearning class for training our HTM model like below:
+We use multisequencelearning classes for training our HTM model like below:
 ````csharp
            // Train the model using MultiSequenceLearning
             MultiSequenceLearning myexperiment = new MultiSequenceLearning();
@@ -210,9 +217,9 @@ We use multisequencelearning class for training our HTM model like below:
             predictor.Reset();
 ````
 
-We are going to use the predictor object as trained HTM model to predict anomalies from our extracted data from predicting_files.
+We used the predictor object as a trained HTM model to predict anomalies from our extracted data from predicting_files.
 
-Using the `AnomalyDetectMethod´ method of AnomalyDetection class, we pass the numerical sequences one by one to our predictor model to detect anomalies.
+Using the `AnomalyDetectMethod´ method of the AnomalyDetection class, we pass the numerical sequences one by one to our predictor model to detect anomalies.
 
 ````csharp
            foreach (var sequence in sequences)
@@ -223,12 +230,12 @@ Using the `AnomalyDetectMethod´ method of AnomalyDetection class, we pass the n
                 }
 ```` 
 
-We are going to iterate through each value of a numerical sequence which is passed through inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
+We are going to iterate through each value of a numerical sequence which is passed through the inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
 
 ```csharp
                     var res = predictor.Predict(item);
 ```
-The prediction derived from predictor model is in a format of "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]". We use string operations to extract data from it. 
+The prediction derived from the predictor model is in the format of, "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]". We use string operations to extract data from it. 
 
 ```csharp
                     var value1 = res.First().PredictedInput.ToString().Split('-');
@@ -242,7 +249,7 @@ S1_5-6-16-10-4-11-7 - 5
 .....
 ```
 
-The first line has the best prediction which HTM model predicts with accuracy. We can easily derive the predicted value which will come after 14 (in this case, it is 13). The string operations are used to get these values. Later we are going to use this to determine anomalies.
+The first line has the best prediction which the HTM model predicts, with accuracy. We can easily derive the predicted value, which will come after 14 (in this case, it is 13). The string operations are used to get these values. Later we are going to use this to determine anomalies.
 
 ````csharp
 
@@ -257,7 +264,7 @@ The first line has the best prediction which HTM model predicts with accuracy. W
                 ..........
 ````
 
-We are using AnomalyScore, which is nothing but the absolute value of the ration of differences of HTM´s predicted number and actual number. If the ratio exceeds tolerancevalue, we mark it as anomaly, otherwise it is not. When an anomaly is detected, we are going to skip that element in the list(we are not going to pass that value to HTM in loop).
+We are using AnomalyScore, which is nothing, but the absolute value of the ratio of differences between HTM´s predicted number and actual number. If the ratio exceeds tolerancevalue, we mark it as an anomaly, otherwise, it is not. When an anomaly is detected, we skip that element in the list (we did not pass that value to HTM in the loop).
 
 
 
