@@ -55,7 +55,7 @@ namespace anomalydetectionapp
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
             {
-                { "W", 25},
+                { "W", 21},
                 { "N", inputBits},
                 { "Radius", -1.0},
                 { "MinVal", 0.0},
