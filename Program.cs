@@ -17,20 +17,19 @@ namespace anomalydetectionapp
         public static void Main(string[] args)
         {
             #pragma warning disable // Disable all warnings
-            
-            
+
             //Taking user input for tolerance value of the experiment
             Console.WriteLine("");
-            Console.WriteLine("Enter the tolerance value for anomaly detection experiment(Example: 0.1):");
+            Console.WriteLine("Enter the tolerance value for anomaly detection experiment (Example: 0.1):");
             Console.WriteLine("");
             double tValue = double.Parse(Console.ReadLine());
-            
+
             Console.WriteLine("");
-            Console.WriteLine("***************************************************");
+            Console.WriteLine("*");
             Console.WriteLine("");
             Console.WriteLine($"Hello! Beginning our anomaly detection experiment.");
             Console.WriteLine("");
-            Console.WriteLine("***************************************************");
+            Console.WriteLine("*");
 
             // Create a dictionary to store sequences
             Dictionary<string, List<double>> mysequences = new Dictionary<string, List<double>>();
@@ -75,6 +74,10 @@ namespace anomalydetectionapp
             var predictor = myexperiment.Run(mysequences);
             predictor.Reset();
 
+            // Create lists to store all data and anomaly indices
+            List<double[]> allData = new List<double[]>();
+            List<List<int>> allAnomalyIndices = new List<List<int>>();
+
             // Detect anomalies in sequences from the predicting folder
             foreach (var sequencesContainer in sequencesContainers1)
             {
@@ -91,10 +94,19 @@ namespace anomalydetectionapp
                     int trimCount = random.Next(1, 4);
                     double[] inputTestArray = inputArray.Skip(trimCount).ToArray();
 
-                    // Detect anomalies in the sequence using the trained model
-                    AnomalyDetection.AnomalyDetectMethod(predictor, inputTestArray, tValue);
+                    // Get the anomaly indices from the AnomalyDetection class
+                    List<int> anomalyIndices = AnomalyDetection.AnomalyDetectMethod(predictor, inputTestArray, tValue);
+
+                    // Add the data and anomaly indices to the lists
+                    allData.Add(inputTestArray);
+                    allAnomalyIndices.Add(anomalyIndices);
+
                 }
+
             }
+
+            // Plot all the data with anomalies
+            AnomalyPlotter.PlotGraphWithAnomalies(allData, allAnomalyIndices);
 
             // Calculate the final experiment accuracy
             double finalExpAccuracy = AnomalyDetection.totalAccuracy / AnomalyDetection.listCount;

@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using NeoCortexApi;
 
 namespace anomalydetectionapp
@@ -11,14 +12,14 @@ namespace anomalydetectionapp
         // Static variables to store total accuracy and list count
         public static double totalAccuracy { get; set; }
         public static double listCount { get; set; }
-        
+
         /// <summary>
         /// Detects anomalies in a sequence of values using trained model predictor.
         /// </summary>
         /// <param name="predictor">The predictor model used for prediction.</param>
         /// <param name="list">The sequence of values to test for anomalies.</param>
         /// <param name="tolerance">The tolerance level ratio for anomaly detection.</param>
-        public static void AnomalyDetectMethod(Predictor predictor, double[] list, double tolerance)
+        public static List<int> AnomalyDetectMethod(Predictor predictor, double[] list, double tolerance)
         {
             Console.WriteLine("");
             Console.WriteLine("-------------------------------------");
@@ -30,6 +31,8 @@ namespace anomalydetectionapp
 
             // Variable to store the accuracy of the HTM model while traversing the list
             double recordAccuracy = 0;
+
+            List<int> anomalyIndices = new List<int>();
 
             // Loop through the list of input values
             for (int i = 0; i < list.Length; i++)
@@ -73,6 +76,7 @@ namespace anomalydetectionapp
                             Console.WriteLine("Anomaly was detected, hence skipping to next value in list.");
                             Console.WriteLine("");
                             recordAccuracy += value2;
+                            anomalyIndices.Add(i);
                         }
                     }
                     else
@@ -105,7 +109,9 @@ namespace anomalydetectionapp
             // This can be accessed from the main program to calculate the final accuracy
             totalAccuracy += accuracyPerList;
             listCount++;
+
+            return anomalyIndices;
         }
-  
+
     }
 }

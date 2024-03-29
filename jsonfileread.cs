@@ -7,8 +7,8 @@ using System.IO;
 /// </summary>
 public class SequencesContainer
 {
-    #pragma warning disable // Disable all warnings
-    
+#pragma warning disable // Disable all warnings
+
     /// <summary>
     /// Gets or sets the list of sequences.
     /// </summary>
@@ -20,9 +20,9 @@ public class SequencesContainer
 /// </summary>
 public class JsonFolderReader
 {
-    
-    #pragma warning disable // Disable all warnings
-    
+
+#pragma warning disable // Disable all warnings
+
     /// <summary>
     /// Gets the list of all sequences read from JSON files.
     /// </summary>

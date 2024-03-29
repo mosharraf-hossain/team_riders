@@ -13,7 +13,7 @@ namespace anomalydetectionapp
     public class MultiSequenceLearning
     {
         #pragma warning disable // Disable all warnings
-        
+
         /// <summary>
         /// Runs the learning of sequences.
         /// </summary>
