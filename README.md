@@ -2,11 +2,6 @@
 
 SE project repository for WS2023-24
 
-
-# Team members:
-Md Zahid Hasan(1396470)
-Md Mosharraf Hossain(1386448)
-
 # Introduction:
 
 Hierarchical Temporal Memory (HTM) technology is a machine learning framework inspired by the human neocortex's structure and function.
@@ -47,115 +42,229 @@ Our HTM Engine has been trained using the MultiSequenceLearning class in the Neo
 reading and utilizing data from our training (learning) and predicting (predictive) folders, which are both present as numerical sequences in 
 JSON files in the "predicting" and "training" folders inside the project directory. 
 
-Please take note that all files inside the folders are read with the .json extension, and exception handlers are set up in case the file format is incorrect.
-
-For this project, we are using data from NAB where the sequences of data are realTweets hourly, 
+# Data format:
+For this project, we used real-time data from Numenta Anomaly Benchmark (NAB). We have taken the tweet count of Google per hour as numerical sequences, 
 which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
 
-# data format:
+According to the dataset, we used a total of 32 hours (16 hours for training and 16 hours for predicting) of data where the beginning time was 01.03.2015 at 12 am and the end time was 01.03.2015 at 4 pm for training data and also the beginning time was 02.03.2015 at 12 am and the end time was 02.03.2015 at 4 pm for predicting data. 
+
+
+
+Below we give our data sequences where the sequences are in JSON files. We keep our dataset in two individual folders which are training_files (for training data where 4 files) and predicting_files (for predicting data where also 4 files).  
+
+For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below:
+
+```json
+
 {
   "sequences": [
-    [ 13,5,10,6,32,17,19,16,14,9,5,7 ],
-    [ 9,9,17,12,8,15,15,1,11,5,8,13 ],
-    [ 7,8,1,8,12,8,5,15,6,9,10,20 ],
-    [ 9,7,19,17,7,24,5,10,11,9,14,6 ]
-  ]
+    [13, 16, 9, 5,10, 7, 5, 9, 13, 14, 9, 8],
+    [12, 4, 11, 11, 11, 18, 6, 5, 8, 9, 5, 15],
+    [13, 6, 14, 7, 1, 8, 9, 5, 6, 10, 6, 6],
+    [10, 16, 8, 9, 5, 16, 6, 10, 11, 6,  16, 14]
+  ]
 }
-
+```
 
 
 # Encoding Process:
 Our input data must be encoded so that our HTM Engine can process it.
 
-We are using the following settings because we will be training and testing data that falls between the range of integer values 
+We are using the following settings, because we will be training and testing data that falls between the range of integer values 
 between 0-100 without any periodicity. Since we only expect values to fall within this range, the minimum and maximum values 
 are set to 0 and 100, respectively. It is necessary to modify these values in other use cases.
 
+"W": 21 - The width of the output vector. 
+"N": 1024 - The number of bits to use for encoding the input range. 
+“Radius": -1.0 - The radius of the output vector. 
+"MinVal": 0.0 - The minimum value of the input range. 
+"MaxVal ": 100.0 - The maximum value of the input range. 
+"Periodic": false - Whether the encoder should wrap values around the ends of the input range.
+"Name": integer  -  A descriptive name for the settings.
+"ClipInput": false - Whether to clip input values to the input range.
+"MaxVal": max - The maximum value of the input range.
 
-            int inputBits = 100;
-            int numColumns = 1024;
+```csharp
+
+            int inputBits = 121;
+            int numColumns = 1210;
             ---------------------
             ---------------------
             double max = 100;
 
 
-            Dictionary<string, object> settings = new Dictionary<string, object>()
-            {
-                { "W", 15},
-                ...........
-                { "MinVal", 0.0},
-                ...........
-                { "MaxVal", max}
-            };
+             Dictionary<string, object> settings = new Dictionary<string, object>()
+               {
+                   { "W", 21},
+                   { "N", inputBits},
+                   { "Radius", -1.0},
+                   { "MinVal", 0.0},
+                   { "Periodic", false},
+                   { "Name", "integer"},
+                   { "ClipInput", false},
+                   { "MaxVal", max}
+               };
+```
+# HTM Configuration:
+According to the Code given below: first, we gave one greeting message, then we set up parameters where the number of bits is used for encoding the input range (121) and the number of columns in the HTM network (1210). We also created the encoder "EncoderBase encoder = new ScalarEncoder(settings);" and then Ran the experiment with the configured parameters, Where the encoding process was given previously.  
 
-# Complete process for Encoding:
+```csharp
+  public Predictor Run(Dictionary<string, List<double>> sequences)
+ {
 
- public Predictor Run(Dictionary<string, List<double>> sequences)
-        {
-            Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
+     Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
+     
+     int inputBits = 121;
+     int numColumns = 1210;
 
-            int inputBits = 100;
-            int numColumns = 1024;
+     HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
+     {
+         Random = new ThreadSafeRandom(42),
 
-            HtmConfig cfg = new HtmConfig(new int[] { inputBits }, new int[] { numColumns })
-            {
-                Random = new ThreadSafeRandom(42),
+         CellsPerColumn = 21,
+         GlobalInhibition = true,
+         LocalAreaDensity = -1,
+         NumActiveColumnsPerInhArea = 0.02 * numColumns,
+         PotentialRadius = (int)(0.15 * inputBits),
+         //InhibitionRadius = 15,
 
-                CellsPerColumn = 25,
-                GlobalInhibition = true,
-                LocalAreaDensity = -1,
-                NumActiveColumnsPerInhArea = 0.02 * numColumns,
-                PotentialRadius = (int)(0.15 * inputBits),
-                //InhibitionRadius = 15,
+         MaxBoost = 10.0,
+         DutyCyclePeriod = 25,
+         MinPctOverlapDutyCycles = 0.75,
+         MaxSynapsesPerSegment = (int)(0.02 * numColumns),
 
-                MaxBoost = 10.0,
-                DutyCyclePeriod = 25,
-                MinPctOverlapDutyCycles = 0.75,
-                MaxSynapsesPerSegment = (int)(0.02 * numColumns),
+         ActivationThreshold = 15,
+         ConnectedPermanence = 0.5,
 
-                ActivationThreshold = 15,
-                ConnectedPermanence = 0.5,
+         // Learning is slower than forgetting in this case.
+         PermanenceDecrement = 0.25,
+         PermanenceIncrement = 0.15,
 
-                // Learning is slower than forgetting in this case.
-                PermanenceDecrement = 0.25,
-                PermanenceIncrement = 0.15,
+         // Used by punishing of segments.
+         PredictedSegmentDecrement = 0.1
+     };
 
-                // Used by punishing of segments.
-                PredictedSegmentDecrement = 0.1
-            };
+     double max = 100;
 
-            double max = 100;
+     Dictionary<string, object> settings = new Dictionary<string, object>()
+     {
+         { "W", 21},
+         { "N", inputBits},
+         { "Radius", -1.0},
+         { "MinVal", 0.0},
+         { "Periodic", false},
+         { "Name", "integer"},
+         { "ClipInput", false},
+         { "MaxVal", max}
+     };
 
-            Dictionary<string, object> settings = new Dictionary<string, object>()
-            {
-                { "W", 15},
-                { "N", inputBits},
-                { "Radius", -1.0},
-                { "MinVal", 0.0},
-                { "Periodic", false},
-                { "Name", "scalar"},
-                { "ClipInput", false},
-                { "MaxVal", max}
-            };
+     EncoderBase encoder = new ScalarEncoder(settings);
 
-            EncoderBase encoder = new ScalarEncoder(settings);
-
-            return RunExperiment(inputBits, cfg, encoder, sequences);
-        }
-
+     return RunExperiment(inputBits, cfg, encoder, sequences);
+ }
+```
 #  Execution Process of the project
 
 We carry out our project in the manner described below:
 
-In our project, we read all the JSON files from the `training_files` and `predicting_folder` using the `JSONFolderreader` class. 
-We then convert the read data into sequences. 
+In our project, we keep all the JSON files inside the folder `training_files` and `predicting_files`. We have used JSON format over other formats like CSV or XML because it can handle complex and large amounts of data.
 
-Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. Model training will be done using multisequencelearning class.
+We use (jsonfileread) to read the json files from the folders.
 
-After that, we use the `AnomalyDetection` class to detect anomalies. We can pass the tolerance value from outside to `AnomalyDetectMethod` method.  
+````csharp
+public JsonFolderReader(string folderPath)
+    {
+        AllSequences = new List<SequencesContainer>();
 
-  
-         
+        // Get all JSON files in the specified folder
+        string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
+.......
+
+````
+
+We extract the numerical sequences from JSON files present inside both the training and predicting folders and use them to train the HTM model using the multisequencelearning class. Later, data extracted from the predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. The folders are in the same project directory:
+````csharp
+            // Get the solution directory path
+            string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
+
+            // Construct paths for training and predicting folders
+            string trainingfolderPath = Path.Combine(solutionDirectory, "training_files");
+            string predictingfolderPath = Path.Combine(solutionDirectory, "predicting_files");
+````
+
+After extracting data from JSON files, we converted it into a format suitable for HTM training.
+
+````csharp
+foreach (var sequencesContainer in sequencesContainers)
+            {
+                var sequences = sequencesContainer.Sequences;
+
+                foreach (var sequence in sequences)
+                {
+                    List<double> convertedSequence = sequence.Select(x => (double)x).ToList();
+
+                    string sequenceKey = "S" + sequenceIndex;
+                    mysequences.Add(sequenceKey, convertedSequence);
+                    sequenceIndex++;
+                }
+
+````
+We use multisequencelearning classes for training our HTM model like below:
+````csharp
+           // Train the model using MultiSequenceLearning
+            MultiSequenceLearning myexperiment = new MultiSequenceLearning();
+            var predictor = myexperiment.Run(mysequences);
+            predictor.Reset();
+````
+
+We used the predictor object as a trained HTM model to predict anomalies from our extracted data from predicting_files.
+
+Using the `AnomalyDetectMethod´ method of the AnomalyDetection class, we pass the numerical sequences one by one to our predictor model to detect anomalies.
+
+````csharp
+           foreach (var sequence in sequences)
+                {
+                    List<double> inputlist = sequence.Select(x => (double)x).ToList();
+                    double[] inputArray = inputlist.ToArray();
+                    AnomalyDetection.AnomalyDetectMethod(predictor, inputArray, 0.2);
+                }
+```` 
+
+We are going to iterate through each value of a numerical sequence which is passed through the inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
+
+```csharp
+                    var res = predictor.Predict(item);
+```
+The prediction derived from the predictor model is in the format of, "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]". We use string operations to extract data from it. 
+
+```csharp
+                    var value1 = res.First().PredictedInput.ToString().Split('-');
+                    var value2 = res.First().Similarity;
+```
+
+Normally output from HTM is in the following format when we pass a numerical value 14 for example:
+```csharp
+S3_11-5-12-10-14-13 - 100
+S1_5-6-16-10-4-11-7 - 5
+.....
+```
+
+The first line has the best prediction which the HTM model predicts, with accuracy. We can easily derive the predicted value, which will come after 14 (in this case, it is 13). The string operations are used to get these values. Later we are going to use this to determine anomalies.
+
+````csharp
+
+                ..............
+
+                        int nextIndex = i + 1;
+                        double nextItem = list[nextIndex];
+                        double predictedNextItem = double.Parse(value1.Last());
+                        var AnomalyScore = Math.Abs(predictedNextItem - nextItem);
+                        var deviation = AnomalyScore / nextItem;
+
+                ..........
+````
+
+We are using AnomalyScore, which is nothing, but the absolute value of the ratio of differences between HTM´s predicted number and actual number. If the ratio exceeds tolerancevalue, we mark it as an anomaly, otherwise, it is not. When an anomaly is detected, we skip that element in the list (we did not pass that value to HTM in the loop).
 
 
 

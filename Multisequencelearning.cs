@@ -12,6 +12,8 @@ namespace anomalydetectionapp
     /// </summary>
     public class MultiSequenceLearning
     {
+        #pragma warning disable // Disable all warnings
+        
         /// <summary>
         /// Runs the learning of sequences.
         /// </summary>
@@ -19,8 +21,6 @@ namespace anomalydetectionapp
         public Predictor Run(Dictionary<string, List<double>> sequences)
         {
 
-            Console.WriteLine($"Hello NeocortexApi! Experiment {nameof(MultiSequenceLearning)}");
-            
             int inputBits = 121;
             int numColumns = 1210;
 
@@ -28,7 +28,7 @@ namespace anomalydetectionapp
             {
                 Random = new ThreadSafeRandom(42),
 
-                CellsPerColumn = 25,
+                CellsPerColumn = 21,
                 GlobalInhibition = true,
                 LocalAreaDensity = -1,
                 NumActiveColumnsPerInhArea = 0.02 * numColumns,
@@ -55,7 +55,7 @@ namespace anomalydetectionapp
 
             Dictionary<string, object> settings = new Dictionary<string, object>()
             {
-                { "W", 21},
+                { "W", 25},
                 { "N", inputBits},
                 { "Radius", -1.0},
                 { "MinVal", 0.0},
