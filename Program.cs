@@ -25,11 +25,11 @@ namespace anomalydetectionapp
             double tValue = double.Parse(Console.ReadLine());
 
             Console.WriteLine("");
-            Console.WriteLine("*");
+            Console.WriteLine("*********************************");
             Console.WriteLine("");
             Console.WriteLine($"Hello! Beginning our anomaly detection experiment.");
             Console.WriteLine("");
-            Console.WriteLine("*");
+            Console.WriteLine("*********************************");
 
             // Create a dictionary to store sequences
             Dictionary<string, List<double>> mysequences = new Dictionary<string, List<double>>();
