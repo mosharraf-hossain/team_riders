@@ -1,0 +1,675 @@
+mosharraf@Mds-MacBook-Air team_riders % dotnet run
+
+Enter the tolerance value for anomaly detection experiment (Example: 0.1):
+
+0.3
+
+*********************************
+
+Hello! Beginning our anomaly detection experiment.
+
+*********************************
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 14, 30, 19, 13, 15, 18, 31, 25, 29, 29, 35.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 12%. The actual value should be 30.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 36%. The actual value should be 15.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 95.83%. The actual value should be 31.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+-------------------------------------
+
+HTM engine accuracy for this list: 13.075454545454544%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 28, 22, 19, 23, 16, 17, 18, 40, 28, 29, 35.
+
+-------------------------------------
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 4 with accuracy: 100%. The actual value should be 19.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 33.33%.
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 95.83%. The actual value should be 40.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+-------------------------------------
+
+HTM engine accuracy for this list: 20.83272727272727%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 29, 23, 19, 13, 17, 19, 23, 20, 25, 35.
+
+-------------------------------------
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 36%. The actual value should be 17.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 13 with accuracy: 8.33%. The actual value should be 25.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+-------------------------------------
+
+HTM engine accuracy for this list: 4.433%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 66, 72, 52, 40, 42, 39, 32, 28, 36, 37, 30.
+
+-------------------------------------
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+-------------------------------------
+
+HTM engine accuracy for this list: 0%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 4, 7, 10, 6, 7, 18, 21, 21, 70.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 11 with accuracy: 100%. The actual value should be 7.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 10 with accuracy: 33.8%. The actual value should be 7.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 4 with accuracy: 58.33%. The actual value should be 21.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+-------------------------------------
+
+HTM engine accuracy for this list: 21.34777777777778%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 21, 13, 11, 13, 11, 5, 6, 10, 14.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 4 with accuracy: 58.33%. The actual value should be 13.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 92.31%. The actual value should be 13.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 100%.
+
+
+No prediction from HTM Model!!!
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 33.8%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 8.33%.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 32.53%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 13, 11, 6, 14, 10, 15, 9, 11, 22.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 36%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 70.59%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 4.17%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 51.06%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 4.17%.
+
+
+Next value is an anomaly. HTM model predicts: 5 with accuracy: 100%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 29.554444444444446%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 10, 11, 22, 9, 13, 11, 12, 8, 12, 17, 22.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 51.06%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 4 with accuracy: 100%. The actual value should be 9.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 36%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 45.83%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 15.38%.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 45.83%. The actual value should be 17.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 26.736363636363635%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 10, 6, 32, 17, 19, 16, 14, 9, 5, 7.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 51.06%. The actual value should be 6.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 33.33%.
+
+
+No prediction from HTM Model!!!
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 100%.
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 100%. The actual value should be 7.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 28.439%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 17, 12, 8, 15, 15, 1, 11, 5, 8, 13.
+
+-------------------------------------
+
+
+No prediction from HTM Model!!!
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 45.83%.
+
+
+Next value is an anomaly. HTM model predicts: 9 with accuracy: 15.38%. The actual value should be 15.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 8 with accuracy: 4.17%. The actual value should be 1.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 100%.
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 9 with accuracy: 15.38%. The actual value should be 13.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 18.076%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 8, 12, 8, 5, 15, 6, 9, 10, 20.
+
+-------------------------------------
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 15.38%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 45.83%.
+
+
+Next value is an anomaly. HTM model predicts: 9 with accuracy: 15.38%. The actual value should be 5.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 8 with accuracy: 4.17%. The actual value should be 6.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 5 with accuracy: 100%. The actual value should be 10.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 20.084444444444443%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 17, 7, 24, 5, 10, 11, 9, 14, 6.
+
+-------------------------------------
+
+
+No prediction from HTM Model!!!
+
+
+Next value is an anomaly. HTM model predicts: 10 with accuracy: 37.5%. The actual value should be 24.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 63.16%. The actual value should be 10.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 95.83%. The actual value should be 9.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 12%.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 23.165555555555557%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 13, 7, 7, 5, 13, 11, 7, 9, 9.
+
+-------------------------------------
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 4.17%.
+
+
+Next value is an anomaly. HTM model predicts: 14 with accuracy: 16.67%. The actual value should be 7.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 63.16%.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 16%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 14 with accuracy: 29.17%. The actual value should be 9.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 14.352222222222224%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 5, 12, 10, 10, 10, 15, 12, 17, 14.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 100%. The actual value should be 12.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 51.06%. The actual value should be 10.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 74.19%. The actual value should be 15.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 45.83%. The actual value should be 17.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 30.119999999999997%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 11, 11, 7, 7, 12, 6, 12, 6, 12.
+
+-------------------------------------
+
+
+Next value is an anomaly. HTM model predicts: 6 with accuracy: 100%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 29.17%. The actual value should be 7.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 29.17%.
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 66.67%. The actual value should be 12.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 35.82%.
+
+
+The list is finished, so we are not going through further anomaly testing.
+
+-------------------------------------
+
+HTM engine accuracy for this list: 28.981111111111115%.
+
+-------------------------------------
+
+-------------------------------------
+
+Testing the sequence for anomaly detection: 11, 8, 8, 10, 11, 5, 3, 8, 7.
+
+-------------------------------------
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 92.31%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 4.17%.
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 15.38%.
+
+
+Next value is an anomaly. HTM model predicts: 16 with accuracy: 51.06%. The actual value should be 11.
+
+
+Anomaly was detected, hence skipping to next value in list.
+
+
+No prediction from HTM Model!!!
+
+
+No prediction from HTM Model!!!
+
+
+Anomaly not detected in the next value!! HTM model accuracy: 15.38%.
+
+
+No prediction from HTM Model!!!
+
+-------------------------------------
+
+HTM engine accuracy for this list: 19.811111111111114%.
+
+-------------------------------------
+
+-------------------------------------
+
+Final experiment accuracy: 20.721200757575758%.
+
+-------------------------------------
+mosharraf@Mds-MacBook-Air team_riders % 
