@@ -39,7 +39,9 @@ According to the dataset, we used a total of 32 hours (16 hours for training and
 
 Below we give our data sequences where the sequences are in JSON files. We keep our dataset in two individual folders which are `training_files` (for training data where 4 files) and `predicting_files` (for predicting data where also 4 files).  
 
-For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below:
+For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below: 
+
+If you want to visit the dataset then just click the link. https://github.com/numenta/NAB/blob/master/data/realTweets/Twitter_volume_GOOG.csv 
 
 ```json
 
@@ -56,7 +58,10 @@ We also use another kind of dataset as JSON files (which is fabricated) to predi
 
 there are also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for training, which is located in the `training_files` folder, and also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for predicting which is located in the `predicting_files` folder. We took a total of 400 days of data. 
 
-Our Dataset structure is like the data given below:  
+Our Dataset structure is like the data given below:
+
+If you want to visit the dataset then just click the link. 
+(https://www.accuweather.com/en/bd/dhaka/28143/march-weather/28143?year=2023)
 ```json
 { 
 "sequences": [ 
@@ -86,6 +91,7 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 "ClipInput": false - Whether to clip input values to the input range.
 "MaxVal": max - The maximum value of the input range.
 
+If you want to see the full code you can view it by clicking the link. https://github.com/mosharraf-hossain/team_riders/blob/main/Multisequencelearning.cs
 ```csharp
 
             int inputBits = 121;
