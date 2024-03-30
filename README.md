@@ -383,7 +383,14 @@ chart.Show();
 
 # Results:
 
+Once the experiment concludes, the anomaly detection results are persisted to the screen, along with HTM accuracy for each individual number sequences and overall HTM accuracy for the whole experiment, like [this](https://github.com/mosharraf-hossain/team_riders/blob/main/output/exp_outputs/Fabricated%20data%20output/run1_log.txt). After experiment is completed, the plotted graph pops up in the default browser like this. Red dots mark the anomalies in our numerical sequence data from predicting folder.
 
+![Plot](https://github.com/mosharraf-hossain/team_riders/blob/main/output/exp_outputs/Fabricated%20data%20output/run2_jpg.png)
 
+Overall, we conducted anomaly detection experiments on two distinct [datasets](https://github.com/mosharraf-hossain/team_riders/tree/main/output/used_datasets). 
+
+We executed three experiments with varying tolerance values for the NAB dataset (Real data) and two experiments for the Weather Fabricated dataset (Fabricated). Our results indicated an average accuracy of *22.58%* for the NAB dataset and *25.75%* for the weather dataset. All the output logs are stored in this [folder](https://github.com/mosharraf-hossain/team_riders/tree/main/output/exp_outputs).
+
+Overall, in conclusion, we can say that the HTM accuracy can be improved by using more data. We were not able to train large amounts of data due to limitations of our local machine. However, we can try using more number of numerical sequences in cloud.
 
 
