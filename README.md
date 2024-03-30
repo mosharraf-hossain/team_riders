@@ -290,6 +290,50 @@ The first line has the best prediction which the HTM model predicts, with accura
 
 We are using AnomalyScore, which is nothing, but the absolute value of the ratio of differences between HTM´s predicted number and actual number. If the ratio exceeds tolerancevalue, we mark it as an anomaly, otherwise, it is not. When an anomaly is detected, we skip that element in the list (we did not pass that value to HTM in the loop).
 
+We use accuracyPerList to record accuracy per numerical sequence tested. recordAccuracy is collected from inside each loop run, which indicates HTM model´s accuracy. We also add index positions of anomalies to anomalyIndices, when we encounter indices of anomalies in loop. totalAccuracy and listCount is used to calculate average accuracy of the whole experiment.
+
+````csharp
+
+          // Calculating the accuracy of the HTM model for each list
+            double accuracyPerList = (recordAccuracy / list.Length);
+````
+
+We use static variables to access these from outside, i.e: in Program.cs.
+
+````csharp
+
+        // Static variables to store total accuracy and list count
+        public static double totalAccuracy { get; set; }
+        public static double listCount { get; set; }
+
+````
+
+The AnomalyPlotter class is used to plot graphs of sequences of data and their anomalies. The class contains one static method, PlotGraphWithAnomalies, which takes two parameters: allData: a list of arrays of doubles, where each array represents a sequence of data, and allAnomalyIndices: a list of lists of integers, where each list represents the indices of the anomalies in a sequence.
+
+````csharp
+public static void PlotGraphWithAnomalies(List<double[]> allData, List<List<int>> allAnomalyIndices)
+````
+
+The method works by creating a line graph for each sequence and a scatter plot for its anomalies. It then combines all the graphs into a chart and displays it. This method uses the XPlot.Plotly library to create the graphs and the chart.
+
+Two lists, allGraphs and allAnomalies, are initialized to store the graphs for the data sequences and their anomalies respectively.
+
+````csharp
+            List<Scatter> allGraphs = new List<Scatter>();
+            List<Scatter> allAnomalies = new List<Scatter>();
+````
+For each sequence in allData and its corresponding anomaly indices in allAnomalyIndices, a graph for the sequence and a graph for the anomalies are created.
+
+````csharp
+            for (int i = 0; i < allData.Count; i++)
+                {
+                    double[] data = allData[i];
+                    List<int> anomalyIndices = allAnomalyIndices[i];
+                    ...
+                }
+````
+
+
 
 
 
