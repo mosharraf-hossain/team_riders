@@ -2,19 +2,7 @@
 
 SE project repository for WS2023-24
 
-# Introduction:
-
-Hierarchical Temporal Memory (HTM) technology is a machine learning framework inspired by the human neocortex's structure and function.
-It emulates the brain's ability to learn, recognize patterns, and make predictions from sensory data. HTM models the neocortex with layers
-of neurons arranged hierarchically, processing information in a sequence and learning temporal patterns dynamically. Key components include 
-spatial pooling, which creates sparse distributed representations of input data, and temporal memory, enabling learning sequences of patterns over time. 
-HTM systems use these learned models for real-time inference, making predictions, and detecting anomalies in streaming data. 
-Its applications span anomaly detection, time-series prediction, natural language processing, and sensor data analysis. 
-With continuous learning capabilities, HTM adapts to changing environments and dynamic datasets effectively. 
-As a result, it offers promising avenues for understanding intelligence and building intelligent systems. 
-Ongoing research in neuroscience and machine learning fuels HTM's evolution, 
-driving advancements in artificial intelligence and cognitive computing. 
-
+# Introduction: 
 Our project would therefore use the NeoCortex API's multisequencelearning class to implement an anomaly detection system. Specifically, 
 we train our HTM Engine by reading numerical sequences from multiple JSON files inside a folder, then use the trained engine to identify patterns and identify anomalies.
 
@@ -30,27 +18,26 @@ For code debugging, we are using IDE Visual Studio Community 2022.
 to run this project, WE need to follow the following steps:
 
 1. Install .NET SDK. 
-2. Then use code editor/IDE of your choice Such as Visual Studio Community 2022 or Visual Studio Code.
-3. Create a new console project and place all the C# codes inside your project folder.
-4. Add/reference Nuget package NeoCortexApi v1.1.4 to this project.
-5. Place numerical sequence JSON Files (datasets) under relevant folders respectively. All the folders should be inside the project folder.
+2. Then use the code editor/IDE of your choice Such as Visual Studio Community 2022.
+3. Add/reference Nuget package NeoCortexApi v1.1.4 to this project.
+4. Place numerical sequence JSON Files (datasets) under relevant folders respectively. All the folders should be inside the project folder.
 
 Our project is based on NeoCortex API. 
 
 # Details of the project: 
 Our HTM Engine has been trained using the MultiSequenceLearning class in the NeoCortex API. The first step in training the HTM Engine will be 
-reading and utilizing data from our training (learning) and predicting (predictive) folders, which are both present as numerical sequences in 
-JSON files in the "predicting" and "training" folders inside the project directory. 
+reading and utilizing data from our  `training_files` (learning) and `predicting_files` (predictive) folders, which are both present as numerical sequences in 
+JSON files in the `predicting_files` and `training_files` folders inside the project directory. 
 
 # Data format:
-For this project, we used real-time data from Numenta Anomaly Benchmark (NAB). We have taken the tweet count of Google per hour as numerical sequences, 
-which are stored inside the JSON files. Example of a JSON file within the training and predicting folder.
+For this project, we used real-time data from the Numenta Anomaly Benchmark (NAB). We have taken the tweet count of Google per hour as numerical sequences, 
+which are stored inside the JSON files. Example of a JSON file within the `training_files` and `predicting_files` folder.
 
 According to the dataset, we used a total of 32 hours (16 hours for training and 16 hours for predicting) of data where the beginning time was 01.03.2015 at 12 am and the end time was 01.03.2015 at 4 pm for training data and also the beginning time was 02.03.2015 at 12 am and the end time was 02.03.2015 at 4 pm for predicting data. 
 
 
 
-Below we give our data sequences where the sequences are in JSON files. We keep our dataset in two individual folders which are training_files (for training data where 4 files) and predicting_files (for predicting data where also 4 files).  
+Below we give our data sequences where the sequences are in JSON files. We keep our dataset in two individual folders which are `training_files` (for training data where 4 files) and `predicting_files` (for predicting data where also 4 files).  
 
 For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below:
 
@@ -65,7 +52,22 @@ For example, an hourly sequence has a list of 12 numerical values per hour: [14,
   ]
 }
 ```
+We also use another kind of dataset as JSON files (which is fabricated) to predict anomaly detection, where the full process is like the above dataset, we did this to test our HTM process and the accuracy level test for various types of data. The fabricated dataset is based on the temperature of Bangladesh in the year 2023. Firstly, we keep both training and predicting datasets in reserved dataset folders then when we need to, we take them from these folders and insert the data into the `training_files` and `predicting_files` folders.  
 
+there are also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for training, which is located in the `training_files` folder, and also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for predicting which is located in the `predicting_files` folder. We took a total of 400 days of data. 
+
+Our Dataset structure is like the data given below:  
+```json
+{ 
+"sequences": [ 
+[35, 26, 38, 28, 33, 27, 32, 29, 36, 25], 
+[34, 26, 33, 21, 37, 26, 31, 25, 39, 31], 
+[37, 29, 36, 28, 39, 33, 32, 25, 33, 27], 
+[23, 17, 24, 16, 22, 15, 23, 14, 21, 14], 
+[18, 14, 22, 15, 17, 13, 22, 15, 24, 17] 
+                      ] 
+}
+```
 
 # Encoding Process:
 Our input data must be encoded so that our HTM Engine can process it.
@@ -106,7 +108,7 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
                };
 ```
 # HTM Configuration:
-According to the Code given below: first, we gave one greeting message, then we set up parameters where the number of bits is used for encoding the input range (121) and the number of columns in the HTM network (1210). We also created the encoder "EncoderBase encoder = new ScalarEncoder(settings);" and then Ran the experiment with the configured parameters, Where the encoding process was given previously.  
+According to the Code given below: first, we gave one greeting message, then we set up parameters where the number of bits is used for encoding the input range (121) and the number of columns in the HTM network (1210). We also created the encoder "EncoderBase encoder = new ScalarEncoder(settings);" and then Ran the experiment with the configured parameters, Where the encoding process was given previously. If you want to see the full code you can view it by clicking the link. https://github.com/mosharraf-hossain/team_riders/blob/main/Multisequencelearning.cs 
 
 ```csharp
   public Predictor Run(Dictionary<string, List<double>> sequences)
@@ -124,44 +126,10 @@ According to the Code given below: first, we gave one greeting message, then we 
          CellsPerColumn = 21,
          GlobalInhibition = true,
          LocalAreaDensity = -1,
-         NumActiveColumnsPerInhArea = 0.02 * numColumns,
-         PotentialRadius = (int)(0.15 * inputBits),
-         //InhibitionRadius = 15,
-
-         MaxBoost = 10.0,
-         DutyCyclePeriod = 25,
-         MinPctOverlapDutyCycles = 0.75,
-         MaxSynapsesPerSegment = (int)(0.02 * numColumns),
-
-         ActivationThreshold = 15,
-         ConnectedPermanence = 0.5,
-
-         // Learning is slower than forgetting in this case.
-         PermanenceDecrement = 0.25,
-         PermanenceIncrement = 0.15,
-
-         // Used by punishing of segments.
-         PredictedSegmentDecrement = 0.1
+         
      };
-
-     double max = 100;
-
-     Dictionary<string, object> settings = new Dictionary<string, object>()
-     {
-         { "W", 21},
-         { "N", inputBits},
-         { "Radius", -1.0},
-         { "MinVal", 0.0},
-         { "Periodic", false},
-         { "Name", "integer"},
-         { "ClipInput", false},
-         { "MaxVal", max}
-     };
-
-     EncoderBase encoder = new ScalarEncoder(settings);
-
-     return RunExperiment(inputBits, cfg, encoder, sequences);
- }
+    ................................................
+    ................................................
 ```
 #  Execution Process of the project
 
