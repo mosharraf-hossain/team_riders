@@ -10,13 +10,13 @@ we train our HTM Engine by reading numerical sequences from multiple JSON files 
 
 To run this project, we need:
 
-.NET 8.0 SDK
-Nuget package: NeoCortexApi Version = 1.1.4
-Nuget package: XPlot.Plotly = 4.0.6
-For code debugging, we are using IDE Visual Studio Community 2022.
+1. .NET 8.0 SDK
+2. Nuget package: NeoCortexApi Version = 1.1.4
+3. Nuget package: XPlot.Plotly = 4.0.6
+4. For code debugging, we are using IDE Visual Studio Community 2022/ Visual Studio Code.
 
 # Usage:
-to run this project, WE need to follow the following steps:
+to run this project, We need to follow the following steps:
 
 1. Install .NET SDK. 
 2. Then use the code editor/IDE of your choice Such as Visual Studio Community 2022.
@@ -254,13 +254,13 @@ AnomalyPlotter.PlotGraphWithAnomalies(allData, allAnomalyIndices);
 We are going to iterate through each value of a numerical sequence which is passed through the inputTestArray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
 
 ```csharp
-                    var res = predictor.Predict(item);
+var res = predictor.Predict(item);
 ```
 The prediction derived from the predictor model is in the format of, "NeoCortexApi.Classifiers.ClassifierResult`1[System.String]". We use string operations to extract data from it. 
 
 ```csharp
-                    var value1 = res.First().PredictedInput.ToString().Split('-');
-                    var value2 = res.First().Similarity;
+var value1 = res.First().PredictedInput.ToString().Split('-');
+var value2 = res.First().Similarity;
 ```
 
 Normally output from HTM is in the following format when we pass a numerical value 14 for example:
@@ -294,17 +294,17 @@ We use accuracyPerList to record accuracy per numerical sequence tested. recordA
 
 ````csharp
 
-          // Calculating the accuracy of the HTM model for each list
-            double accuracyPerList = (recordAccuracy / list.Length);
+// Calculating the accuracy of the HTM model for each list
+double accuracyPerList = (recordAccuracy / list.Length);
 ````
 
 We use static variables to access these from outside, i.e: in Program.cs.
 
 ````csharp
 
-        // Static variables to store total accuracy and list count
-        public static double totalAccuracy { get; set; }
-        public static double listCount { get; set; }
+// Static variables to store total accuracy and list count
+public static double totalAccuracy { get; set; }
+public static double listCount { get; set; }
 
 ````
 
@@ -319,19 +319,69 @@ The method works by creating a line graph for each sequence and a scatter plot f
 Two lists, allGraphs and allAnomalies, are initialized to store the graphs for the data sequences and their anomalies respectively.
 
 ````csharp
-            List<Scatter> allGraphs = new List<Scatter>();
-            List<Scatter> allAnomalies = new List<Scatter>();
+List<Scatter> allGraphs = new List<Scatter>();
+List<Scatter> allAnomalies = new List<Scatter>();
 ````
 For each sequence in allData and its corresponding anomaly indices in allAnomalyIndices, a graph for the sequence and a graph for the anomalies are created.
 
 ````csharp
-            for (int i = 0; i < allData.Count; i++)
-                {
-                    double[] data = allData[i];
-                    List<int> anomalyIndices = allAnomalyIndices[i];
-                    ...
-                }
+for (int i = 0; i < allData.Count; i++)
+{
+  double[] data = allData[i];
+  List<int> anomalyIndices = allAnomalyIndices[i];
+  ...
+
+}
 ````
+
+A Scatter object graph is created for the sequence. The x-values are the indices of the data points, and the y-values are the data points themselves. The graph is a line graph and is named "Sequence" followed by the index of the sequence.
+
+````csharp
+var graph = new Scatter
+{
+    x = Enumerable.Range(0, data.Length).ToArray(),
+    y = data,
+    mode = "lines",
+    name = "Sequence" + i
+};
+````
+
+Another Scatter object anomalies is created for the anomalies in the sequence. The x-values are the indices of the anomalies, and the y-values are the values of the anomalies. The graph is a scatter plot and is named "Anomalies in sequence" followed by the index of the sequence. The color of the markers is set to red.
+
+````csharp
+var anomalies = new Scatter
+{
+    x = anomalyIndices.ToArray(),
+    y = anomalyIndices.Select(index => data[index]).ToArray(),
+    mode = "markers",
+    name = "Anomalies in sequence" + i,
+    marker = new Marker { color = "red" }
+};
+
+````
+
+The graph and anomalies are added to allGraphs and allAnomalies respectively.
+
+````csharp
+
+allGraphs.Add(graph);
+allAnomalies.Add(anomalies);
+
+````
+
+A Chart object chart is created by plotting all the graphs in allGraphs and allAnomalies. The title of the chart and the labels of the x-axis and y-axis are set. Finally, the chart is displayed.
+
+````csharp
+
+var chart = Chart.Plot(allGraphs.Concat(allAnomalies));
+chart.WithTitle("Graph with Anomalies");
+chart.WithXTitle("X-axis(Index of data point)");
+chart.WithYTitle("Y-axis(Value of data point)");
+chart.Show();
+
+````
+
+# Results:
 
 
 
