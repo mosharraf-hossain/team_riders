@@ -243,13 +243,15 @@ Using the `AnomalyDetectMethod´ method of the [AnomalyDetection](https://github
                     List<int> anomalyIndices = AnomalyDetection.AnomalyDetectMethod(predictor, inputTestArray, tValue);
 ````
 
-In the end, we are going to 
+In the end, we are going to use AnomalyPlotter class under [PlotAnomaly.cs](https://github.com/mosharraf-hossain/team_riders/blob/main/PlotAnomaly.cs) to plot our anomalies.
 
 ````csharp
 
 AnomalyPlotter.PlotGraphWithAnomalies(allData, allAnomalyIndices);
 
-We are going to iterate through each value of a numerical sequence which is passed through the inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
+````
+
+We are going to iterate through each value of a numerical sequence which is passed through the inputTestArray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
 
 ```csharp
                     var res = predictor.Predict(item);
@@ -277,8 +279,11 @@ The first line has the best prediction which the HTM model predicts, with accura
                         int nextIndex = i + 1;
                         double nextItem = list[nextIndex];
                         double predictedNextItem = double.Parse(value1.Last());
+
+                        // Calculating the anomaly score and deviation
                         var AnomalyScore = Math.Abs(predictedNextItem - nextItem);
                         var deviation = AnomalyScore / nextItem;
+
 
                 ..........
 ````
