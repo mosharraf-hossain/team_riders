@@ -54,7 +54,7 @@ If you want to visit the dataset then just click the link. https://github.com/nu
   ]
 }
 ```
-We also use another kind of dataset as JSON files (which is fabricated) to predict anomaly detection, where the full process is like the above dataset, we did this to test our HTM process and the accuracy level test for various types of data. The fabricated dataset is based on the temperature of Bangladesh in the year 2023. Firstly, we keep both training and predicting datasets in reserved dataset folders then when we need to, we take them from these folders and insert the data into the `training_files` and `predicting_files` folders.  
+We also use another kind of dataset as JSON files (which is fabricated) to predict anomaly detection, where the full process is like the above dataset, we did this to test our HTM process and the accuracy level test for various types of data. The fabricated dataset is based on the temperature of Dhaka, Bangladesh, in the year 2023. Firstly, we keep both training and predicting datasets in reserved dataset folders then when we need to, we take them from these folders and insert the data into the `training_files` and `predicting_files` folders.  
 
 there are also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for training, which is located in the `training_files` folder, and also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for predicting which is located in the `predicting_files` folder. We took a total of 400 days of data. 
 
@@ -141,9 +141,17 @@ According to the Code given below: first, we gave one greeting message, then we 
 
 We carry out our project in the manner described below:
 
-In our project, we keep all the JSON files inside the folder `training_files` and `predicting_files`. We have used JSON format over other formats like CSV or XML because it can handle complex and large amounts of data.
+Keep all the JSON files inside the folder `training_files` and `predicting_files`, present in project directory. To execute our project, from terminal, write dotnet run and press enter.  After that, add tolerance value ratio which you would like to use, for instance: 0.2.
 
-We use (jsonfileread) to read the json files from the folders.
+````terminal
+mosharraf@Mds-MacBook-Air team_riders % dotnet run
+
+Enter the tolerance value for anomaly detection experiment (Example: 0.1):
+
+0.2
+````
+
+We have used JSON format over other formats like CSV or XML because it can handle complex and large amounts of data. We use JsonFolderReader class under [jsonfileread.cs](https://github.com/mosharraf-hossain/team_riders/blob/main/jsonfileread.cs) to read the json files from the folders.
 
 ````csharp
 public JsonFolderReader(string folderPath)
@@ -156,8 +164,15 @@ public JsonFolderReader(string folderPath)
 
 ````
 
-We extract the numerical sequences from JSON files present inside both the training and predicting folders and use them to train the HTM model using the multisequencelearning class. Later, data extracted from the predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. The folders are in the same project directory:
+We extract the numerical sequences from JSON files present inside both the training and predicting folders and use them to train the HTM model using the multisequencelearning class. Later, data extracted from the predicting folder is used for anomaly detection. Sequences from the training and predicting folder will used for training our model while the predicting folder will only be used for predicting. We use dictionary to store sequences. The folders are in the same project directory:
+
 ````csharp
+            // Create a dictionary to store sequences
+            Dictionary<string, List<double>> mysequences = new Dictionary<string, List<double>>();
+
+            ................
+            .............
+
             // Get the solution directory path
             string solutionDirectory = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName;
 
@@ -184,6 +199,7 @@ foreach (var sequencesContainer in sequencesContainers)
 
 ````
 We use multisequencelearning classes for training our HTM model like below:
+
 ````csharp
            // Train the model using MultiSequenceLearning
             MultiSequenceLearning myexperiment = new MultiSequenceLearning();
@@ -191,17 +207,31 @@ We use multisequencelearning classes for training our HTM model like below:
             predictor.Reset();
 ````
 
-We used the predictor object as a trained HTM model to predict anomalies from our extracted data from predicting_files.
-
-Using the `AnomalyDetectMethod´ method of the AnomalyDetection class, we pass the numerical sequences one by one to our predictor model to detect anomalies.
+We use list of lists to store numerical sequences which we are using for anomaly detection, and anomaly indices: indices where we can find anomalies. This is important for plotting. More about this later.
 
 ````csharp
-           foreach (var sequence in sequences)
-                {
+            // Create lists to store all data and anomaly indices
+            List<double[]> allData = new List<double[]>();
+            List<List<int>> allAnomalyIndices = new List<List<int>>();
+````
+
+We used the predictor object as a trained HTM model to predict anomalies from our extracted data from predicting_files.
+
+Using the `AnomalyDetectMethod´ method of the [AnomalyDetection](https://github.com/mosharraf-hossain/team_riders/blob/main/AnomalyDetection.cs) class, we pass the numerical sequences one by one to our predictor model to detect anomalies. Please note that before passing list of numerical sequences, we are trimming a few values in the beginning randomly.
+
+````csharp
+
+                    // Convert the sequence to a list of double values
                     List<double> inputlist = sequence.Select(x => (double)x).ToList();
                     double[] inputArray = inputlist.ToArray();
-                    AnomalyDetection.AnomalyDetectMethod(predictor, inputArray, 0.2);
-                }
+
+                    // Trim some values randomly in the beginning of the sequence
+                    Random random = new Random();
+                    int trimCount = random.Next(1, 4);
+                    double[] inputTestArray = inputArray.Skip(trimCount).ToArray();
+
+                    // Get the anomaly indices from the AnomalyDetection class
+                    List<int> anomalyIndices = AnomalyDetection.AnomalyDetectMethod(predictor, inputTestArray, tValue);
 ```` 
 
 We are going to iterate through each value of a numerical sequence which is passed through the inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
