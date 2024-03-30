@@ -11,7 +11,8 @@ we train our HTM Engine by reading numerical sequences from multiple JSON files 
 To run this project, we need:
 
 .NET 8.0 SDK
-Nuget package: NeoCortexApi Version= 1.1.4
+Nuget package: NeoCortexApi Version = 1.1.4
+Nuget package: XPlot.Plotly = 4.0.6
 For code debugging, we are using IDE Visual Studio Community 2022.
 
 # Usage:
@@ -19,8 +20,10 @@ to run this project, WE need to follow the following steps:
 
 1. Install .NET SDK. 
 2. Then use the code editor/IDE of your choice Such as Visual Studio Community 2022.
-3. Add/reference Nuget package NeoCortexApi v1.1.4 to this project.
+3. Add/reference nuget packages to this project.
 4. Place numerical sequence JSON Files (datasets) under relevant folders respectively. All the folders should be inside the project folder.
+5. Enter dotnet run. It will ask you to enter tolerance value ratio. Give a ratio and then press enter.
+6. Output will be persisted on your terminal. Also, graph with anomalies will pop-up and displayed on your default browser.
 
 Our project is based on NeoCortex API. 
 
@@ -30,18 +33,17 @@ reading and utilizing data from our  `training_files` (learning) and `predicting
 JSON files in the `predicting_files` and `training_files` folders inside the project directory. 
 
 # Data format:
-For this project, we used real-time data from the Numenta Anomaly Benchmark (NAB). We have taken the tweet count of Google per hour as numerical sequences, 
-which are stored inside the JSON files. Example of a JSON file within the `training_files` and `predicting_files` folder.
+For this project, we used two datasets. 
+
+1. We used real-time data from the Numenta Anomaly Benchmark (NAB). We have taken the tweet count of Google per hour as numerical sequences, which are stored inside the JSON files. Example of a JSON file within the `training_files` and `predicting_files` folder.
 
 According to the dataset, we used a total of 32 hours (16 hours for training and 16 hours for predicting) of data where the beginning time was 01.03.2015 at 12 am and the end time was 01.03.2015 at 4 pm for training data and also the beginning time was 02.03.2015 at 12 am and the end time was 02.03.2015 at 4 pm for predicting data. 
-
-
 
 Below we give our data sequences where the sequences are in JSON files. We keep our dataset in two individual folders which are `training_files` (for training data where 4 files) and `predicting_files` (for predicting data where also 4 files).  
 
 For example, an hourly sequence has a list of 12 numerical values per hour: [14, 14, 9, 13, 7, 7, 5, 13, 11, 7, 9, 9]. Our JSON structure is like the data given below: 
 
-If you want to visit the dataset then just click the link. https://github.com/numenta/NAB/blob/master/data/realTweets/Twitter_volume_GOOG.csv 
+If you want to visit the dataset then just click the [link](https://github.com/numenta/NAB/blob/master/data/realTweets/Twitter_volume_GOOG.csv)
 
 ```json
 
@@ -54,14 +56,15 @@ If you want to visit the dataset then just click the link. https://github.com/nu
   ]
 }
 ```
-We also use another kind of dataset as JSON files (which is fabricated) to predict anomaly detection, where the full process is like the above dataset, we did this to test our HTM process and the accuracy level test for various types of data. The fabricated dataset is based on the temperature of Dhaka, Bangladesh, in the year 2023. Firstly, we keep both training and predicting datasets in reserved dataset folders then when we need to, we take them from these folders and insert the data into the `training_files` and `predicting_files` folders.  
 
-there are also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for training, which is located in the `training_files` folder, and also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for predicting which is located in the `predicting_files` folder. We took a total of 400 days of data. 
+2. We also use another kind of dataset as JSON files (which is fabricated) to predict anomaly detection, where the full process is similar to the above. We did this to test our HTM process and the accuracy level test for various types of data. The fabricated dataset is based on the temperature of Dhaka, Bangladesh, in the year 2023. Firstly, we keep both training and predicting datasets in reserved dataset folders then when we need to, we take them from these folders and insert the data into the `training_files` and `predicting_files` folders.  
+
+There are also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for training, which is located in the `training_files` folder, and also 4 files each file has 5 sequences where each sequence has 10 numerical data (means 10 days temperature value) for predicting which is located in the `predicting_files` folder. We took a total of 400 days of data. 
 
 Our Dataset structure is like the data given below:
 
-If you want to visit the dataset then just click the link. 
-(https://www.accuweather.com/en/bd/dhaka/28143/march-weather/28143?year=2023)
+If you want to visit the dataset then just click the [link](https://www.accuweather.com/en/bd/dhaka/28143/march-weather/28143?year=2023)
+
 ```json
 { 
 "sequences": [ 
@@ -70,11 +73,12 @@ If you want to visit the dataset then just click the link.
 [37, 29, 36, 28, 39, 33, 32, 25, 33, 27], 
 [23, 17, 24, 16, 22, 15, 23, 14, 21, 14], 
 [18, 14, 22, 15, 17, 13, 22, 15, 24, 17] 
-                      ] 
+] 
 }
 ```
 
 # Encoding Process:
+
 Our input data must be encoded so that our HTM Engine can process it.
 
 We are using the following settings, because we will be training and testing data that falls between the range of integer values 
@@ -91,7 +95,8 @@ are set to 0 and 100, respectively. It is necessary to modify these values in ot
 "ClipInput": false - Whether to clip input values to the input range.
 "MaxVal": max - The maximum value of the input range.
 
-If you want to see the full code you can view it by clicking the link. https://github.com/mosharraf-hossain/team_riders/blob/main/Multisequencelearning.cs
+If you want to see the full code you can view it by clicking the [link](https://github.com/mosharraf-hossain/team_riders/blob/main/Multisequencelearning.cs)
+
 ```csharp
 
             int inputBits = 121;
@@ -113,10 +118,13 @@ If you want to see the full code you can view it by clicking the link. https://g
                    { "MaxVal", max}
                };
 ```
+
 # HTM Configuration:
-According to the Code given below: first, we gave one greeting message, then we set up parameters where the number of bits is used for encoding the input range (121) and the number of columns in the HTM network (1210). We also created the encoder "EncoderBase encoder = new ScalarEncoder(settings);" and then Ran the experiment with the configured parameters, Where the encoding process was given previously. If you want to see the full code you can view it by clicking the link. https://github.com/mosharraf-hossain/team_riders/blob/main/Multisequencelearning.cs 
+
+We set up parameters where the number of bits is used for encoding the input range (121) and the number of columns in the HTM network (1210). We also created the encoder "EncoderBase encoder = new ScalarEncoder(settings);" and then run the experiment with the configured parameters, where the encoding process was given previously. If you want to see the full code you can view it by clicking the [link](https://github.com/mosharraf-hossain/team_riders/blob/main/Multisequencelearning.cs)
 
 ```csharp
+
   public Predictor Run(Dictionary<string, List<double>> sequences)
  {
 
@@ -183,8 +191,9 @@ We extract the numerical sequences from JSON files present inside both the train
 
 After extracting data from JSON files, we converted it into a format suitable for HTM training.
 
-````csharp
-foreach (var sequencesContainer in sequencesContainers)
+````csharp  
+
+          foreach (var sequencesContainer in sequencesContainers)
             {
                 var sequences = sequencesContainer.Sequences;
 
@@ -207,6 +216,8 @@ We use multisequencelearning classes for training our HTM model like below:
             predictor.Reset();
 ````
 
+We used the predictor object as a trained HTM model to predict anomalies from our extracted data from predicting_files.
+
 We use list of lists to store numerical sequences which we are using for anomaly detection, and anomaly indices: indices where we can find anomalies. This is important for plotting. More about this later.
 
 ````csharp
@@ -214,8 +225,6 @@ We use list of lists to store numerical sequences which we are using for anomaly
             List<double[]> allData = new List<double[]>();
             List<List<int>> allAnomalyIndices = new List<List<int>>();
 ````
-
-We used the predictor object as a trained HTM model to predict anomalies from our extracted data from predicting_files.
 
 Using the `AnomalyDetectMethod´ method of the [AnomalyDetection](https://github.com/mosharraf-hossain/team_riders/blob/main/AnomalyDetection.cs) class, we pass the numerical sequences one by one to our predictor model to detect anomalies. Please note that before passing list of numerical sequences, we are trimming a few values in the beginning randomly.
 
@@ -232,7 +241,13 @@ Using the `AnomalyDetectMethod´ method of the [AnomalyDetection](https://github
 
                     // Get the anomaly indices from the AnomalyDetection class
                     List<int> anomalyIndices = AnomalyDetection.AnomalyDetectMethod(predictor, inputTestArray, tValue);
-```` 
+````
+
+In the end, we are going to 
+
+````csharp
+
+AnomalyPlotter.PlotGraphWithAnomalies(allData, allAnomalyIndices);
 
 We are going to iterate through each value of a numerical sequence which is passed through the inputarray parameter to the `AnomalyDetectMethod` method. The trained model output: predictor is used to predict the next element for comparison. We use an anomalyscore ratio to calculate and compare to detect anomalies If the prediction crosses a certain tolerance level, it is taken as an anomaly. We can pass the tolerance value from outside to the method mentioned above.
 
