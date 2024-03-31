@@ -1,6 +1,4 @@
-# Implement anomaly detection sample (WS2023-24)
-
-SE project repository for WS2023-24
+# Implement anomaly detection sample
 
 # Introduction: 
 Our project would therefore use the NeoCortex API's multisequencelearning class to implement an anomaly detection system. Specifically, 
